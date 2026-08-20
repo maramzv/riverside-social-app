@@ -17,6 +17,7 @@ const uploadField = document.getElementById("upload-field");
 const uploadInput = document.getElementById("media-upload");
 const uploadLabelText = document.getElementById("upload-label-text");
 const clearUploadBtn = document.getElementById("clear-upload-btn");
+const uploadError = document.getElementById("upload-error");
 
 const composer = document.getElementById("composer");
 const composerPlatformLabel = document.getElementById("composer-platform-label");
@@ -280,13 +281,29 @@ function updateComposerPlatform() {
   composerPlatformLabel.textContent = platform;
 }
 
-const MEDIA_ICONS = { Photo: "\u{1F5BC}️", Video: "▶️" };
+const PLACEHOLDER_ASSETS = {
+  Photo: "assets/placeholder-photo.png",
+  Video: "assets/placeholder-video.webm",
+};
+
+const MAX_VIDEO_SECONDS = 8;
 
 function clearUpload() {
   if (uploadedMediaUrl) URL.revokeObjectURL(uploadedMediaUrl);
   uploadedMediaUrl = null;
   uploadInput.value = "";
   clearUploadBtn.classList.add("hidden");
+  uploadError.textContent = "";
+}
+
+function getVideoDuration(url) {
+  return new Promise((resolve, reject) => {
+    const probe = document.createElement("video");
+    probe.preload = "metadata";
+    probe.onloadedmetadata = () => resolve(probe.duration);
+    probe.onerror = () => reject(new Error("Couldn't read that video file."));
+    probe.src = url;
+  });
 }
 
 function updateUploadField() {
@@ -313,23 +330,25 @@ function renderComposerMedia() {
   }
 
   composerMedia.classList.remove("hidden");
-
-  if (uploadedMediaUrl) {
-    composerMedia.style.background = "";
-    composerMedia.innerHTML =
-      asset === "Photo"
-        ? `<img src="${uploadedMediaUrl}" alt="" class="composer-media-file" />`
-        : `<video src="${uploadedMediaUrl}" class="composer-media-file" controls muted></video>`;
-    return;
-  }
+  composerMedia.style.background = "";
 
   const type = typeSelect.value;
   const label = type === "Book" ? selectedItem.title : selectedItem.event_name;
-  composerMedia.style.background = genreColor(type === "Book" ? selectedItem.genre : selectedItem.event_name);
-  composerMedia.innerHTML = `
-    <span class="composer-media-icon">${MEDIA_ICONS[asset]}</span>
-    <span class="composer-media-placeholder-label">${label}</span>
-  `;
+
+  if (uploadedMediaUrl) {
+    composerMedia.innerHTML =
+      asset === "Photo"
+        ? `<img src="${uploadedMediaUrl}" alt="" class="composer-media-file" />`
+        : `<video src="${uploadedMediaUrl}" class="composer-media-file" controls muted autoplay loop playsinline></video>`;
+    return;
+  }
+
+  // No upload yet — show a bundled sample asset so the mock post still looks like a real post.
+  const placeholderTag =
+    asset === "Photo"
+      ? `<img src="${PLACEHOLDER_ASSETS.Photo}" alt="" class="composer-media-file" />`
+      : `<video src="${PLACEHOLDER_ASSETS.Video}" class="composer-media-file" muted autoplay loop playsinline></video>`;
+  composerMedia.innerHTML = `${placeholderTag}<span class="composer-media-overlay-label">${label}</span>`;
 }
 
 function generateWithTone(tone) {
@@ -481,11 +500,33 @@ aiGenerateBtn.addEventListener("click", () => {
   toneField.classList.toggle("hidden");
 });
 
-uploadInput.addEventListener("change", () => {
+uploadInput.addEventListener("change", async () => {
   const file = uploadInput.files[0];
   if (!file) return;
+  const asset = selectedPillValue(assetPills);
+  uploadError.textContent = "";
+
+  const candidateUrl = URL.createObjectURL(file);
+
+  if (asset === "Video") {
+    try {
+      const duration = await getVideoDuration(candidateUrl);
+      if (duration > MAX_VIDEO_SECONDS) {
+        URL.revokeObjectURL(candidateUrl);
+        uploadInput.value = "";
+        uploadError.textContent = `That video is ${duration.toFixed(1)}s — please upload one ${MAX_VIDEO_SECONDS}s or shorter.`;
+        return;
+      }
+    } catch (err) {
+      URL.revokeObjectURL(candidateUrl);
+      uploadInput.value = "";
+      uploadError.textContent = err.message;
+      return;
+    }
+  }
+
   if (uploadedMediaUrl) URL.revokeObjectURL(uploadedMediaUrl);
-  uploadedMediaUrl = URL.createObjectURL(file);
+  uploadedMediaUrl = candidateUrl;
   renderComposerMedia();
 });
 

@@ -215,6 +215,22 @@ button:disabled {
   display: none;
 }
 
+.upload-hint {
+  font-size: 0.75rem;
+  color: #8a7d70;
+  font-style: italic;
+}
+
+.upload-error {
+  color: #a33;
+  font-size: 0.8rem;
+  margin: -0.25rem 0 0.75rem;
+}
+
+.upload-error:empty {
+  display: none;
+}
+
 /* Composer preview */
 
 .composer {
@@ -280,24 +296,24 @@ button:disabled {
   display: none;
 }
 
-.composer-media-icon {
-  font-size: 1.6rem;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
-}
-
-.composer-media-placeholder-label {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
 .composer-media-file {
   width: 100%;
   height: 100%;
   object-fit: cover;
   padding: 0;
+}
+
+.composer-media-overlay-label {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0.6rem;
+  right: 0.6rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
 }
 
 .composer-icons {
