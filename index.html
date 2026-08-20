@@ -52,22 +52,21 @@
 
       <div class="compose-row">
         <div class="compose-text-field">
-          <label for="caption-input">Caption</label>
           <textarea
             id="caption-input"
             rows="3"
             placeholder="Write a caption, or generate one with AI..."
           ></textarea>
           <div class="ai-generate-row">
-            <button id="ai-generate-btn" type="button" disabled>&#10024; Generate</button>
-            <div class="pill-field hidden" id="tone-field">
-              <span class="pill-field-label">Tone</span>
-              <div class="pill-group" id="tone-pills">
-                <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
-                <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
-                <button type="button" class="pill" data-value="Playful">Playful</button>
-                <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
-              </div>
+            <button id="ai-generate-btn" type="button" disabled>&#10024; Generate Text</button>
+          </div>
+          <div class="tone-panel hidden" id="tone-field">
+            <p class="tone-panel-label">Pick a tone to generate the caption:</p>
+            <div class="pill-group" id="tone-pills">
+              <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
+              <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
+              <button type="button" class="pill" data-value="Playful">Playful</button>
+              <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
             </div>
           </div>
           <p id="image-idea-line"></p>

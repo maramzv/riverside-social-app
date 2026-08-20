@@ -175,6 +175,26 @@ button:disabled {
   margin-top: 0.5rem;
 }
 
+.tone-panel {
+  margin-top: 0.6rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: #f4ede3;
+}
+
+.tone-panel.hidden {
+  display: none;
+}
+
+.tone-panel-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 /* Compose row: caption + generate on the left, upload on the right */
 
 .compose-row {
