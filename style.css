@@ -175,13 +175,32 @@ button:disabled {
   margin-top: 0.5rem;
 }
 
+/* Compose row: caption + generate on the left, upload on the right */
+
+.compose-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.compose-text-field {
+  flex: 1 1 320px;
+}
+
+.compose-text-field textarea {
+  margin-top: 0.35rem;
+}
+
 /* Upload field */
 
 .upload-field {
+  flex: 0 0 200px;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 .upload-field.hidden {
@@ -224,7 +243,7 @@ button:disabled {
 .upload-error {
   color: #a33;
   font-size: 0.8rem;
-  margin: -0.25rem 0 0.75rem;
+  margin: 0;
 }
 
 .upload-error:empty {
@@ -330,8 +349,7 @@ button:disabled {
 
 .composer-caption {
   display: inline;
-  outline: none;
-  min-height: 1.2em;
+  white-space: pre-wrap;
 }
 
 .composer-caption:empty::before {

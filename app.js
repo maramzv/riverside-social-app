@@ -13,6 +13,8 @@ const toneField = document.getElementById("tone-field");
 const tonePills = document.getElementById("tone-pills");
 const aiGenerateBtn = document.getElementById("ai-generate-btn");
 
+const captionInput = document.getElementById("caption-input");
+
 const uploadField = document.getElementById("upload-field");
 const uploadInput = document.getElementById("media-upload");
 const uploadLabelText = document.getElementById("upload-label-text");
@@ -41,10 +43,10 @@ let platformLinks = {};
 let uploadedMediaUrl = null;
 
 const PLATFORM_LINK_FIELDS = [
-  { field: "instagram_link", label: "Instagram", icon: "\u{1F4F7}" },
-  { field: "tiktok_link", label: "TikTok", icon: "\u{1F3B5}" },
-  { field: "x_link", label: "X", icon: "✕" },
-  { field: "website_link", label: "Website", icon: "\u{1F310}" },
+  { field: "instagram_link", label: "Instagram" },
+  { field: "tiktok_link", label: "TikTok" },
+  { field: "x_link", label: "X" },
+  { field: "website_link", label: "Website" },
 ];
 
 const CAPTION_TEMPLATES = {
@@ -204,7 +206,7 @@ async function loadPlatforms() {
     btn.type = "button";
     btn.className = "pill" + (i === 0 ? " selected" : "");
     btn.dataset.value = p.label;
-    btn.textContent = `${p.icon} ${p.label}`;
+    btn.textContent = p.label;
     platformPills.appendChild(btn);
   });
 
@@ -253,12 +255,17 @@ function onItemChosen() {
 
 // --- composer --------------------------------------------------------
 
+function syncCaptionPreview() {
+  composerCaption.textContent = captionInput.value;
+}
+
 function resetComposer() {
   composer.classList.add("composer-disabled");
   aiGenerateBtn.disabled = true;
   scheduleBtn.disabled = true;
   toneField.classList.add("hidden");
-  composerCaption.textContent = "";
+  captionInput.value = "";
+  syncCaptionPreview();
   composerHashtags.textContent = "";
   imageIdeaLine.textContent = "";
   clearUpload();
@@ -269,7 +276,8 @@ function enableComposer() {
   composer.classList.remove("composer-disabled");
   aiGenerateBtn.disabled = false;
   scheduleBtn.disabled = false;
-  composerCaption.textContent = "";
+  captionInput.value = "";
+  syncCaptionPreview();
   composerHashtags.textContent = "";
   imageIdeaLine.textContent = "";
   clearUpload();
@@ -359,7 +367,8 @@ function generateWithTone(tone) {
   const hashtags = hashtagsFor(type, selectedItem);
   const imageIdea = imageIdeaFor(type, tone);
 
-  composerCaption.textContent = caption;
+  captionInput.value = caption;
+  syncCaptionPreview();
   composerHashtags.textContent = hashtags.join(" ");
   imageIdeaLine.textContent = `Visual idea: ${imageIdea}`;
 }
@@ -373,7 +382,7 @@ function generatePostId() {
 async function schedulePost() {
   if (!selectedItem) return;
   const type = typeSelect.value;
-  const caption = composerCaption.textContent.trim();
+  const caption = captionInput.value.trim();
   if (!caption) {
     saveStatus.textContent = "Write or generate a caption first.";
     return;
@@ -404,7 +413,8 @@ async function schedulePost() {
     saveStatus.textContent = `Error scheduling post: ${error.message}`;
   } else {
     saveStatus.textContent = postDate > todayStr() ? "Scheduled!" : "Saved!";
-    composerCaption.textContent = "";
+    captionInput.value = "";
+    syncCaptionPreview();
     composerHashtags.textContent = "";
     imageIdeaLine.textContent = "";
     await loadHistory();
@@ -495,6 +505,8 @@ setupPillGroup(assetPills, () => {
   renderComposerMedia();
 });
 setupPillGroup(tonePills, (tone) => generateWithTone(tone));
+
+captionInput.addEventListener("input", syncCaptionPreview);
 
 aiGenerateBtn.addEventListener("click", () => {
   toneField.classList.toggle("hidden");

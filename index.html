@@ -50,15 +50,39 @@
         </div>
       </div>
 
-      <div class="upload-field hidden" id="upload-field">
-        <label class="upload-label" for="media-upload">
-          <span id="upload-label-text">Upload photo</span>
-        </label>
-        <input type="file" id="media-upload" accept="image/*" hidden />
-        <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
-        <span class="upload-hint">A sample image/video shows until you upload your own. Videos must be 8s or shorter.</span>
+      <div class="compose-row">
+        <div class="compose-text-field">
+          <label for="caption-input">Caption</label>
+          <textarea
+            id="caption-input"
+            rows="3"
+            placeholder="Write a caption, or generate one with AI..."
+          ></textarea>
+          <div class="ai-generate-row">
+            <button id="ai-generate-btn" type="button" disabled>&#10024; Generate</button>
+            <div class="pill-field hidden" id="tone-field">
+              <span class="pill-field-label">Tone</span>
+              <div class="pill-group" id="tone-pills">
+                <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
+                <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
+                <button type="button" class="pill" data-value="Playful">Playful</button>
+                <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
+              </div>
+            </div>
+          </div>
+          <p id="image-idea-line"></p>
+        </div>
+
+        <div class="upload-field hidden" id="upload-field">
+          <label class="upload-label" for="media-upload">
+            <span id="upload-label-text">Upload photo</span>
+          </label>
+          <input type="file" id="media-upload" accept="image/*" hidden />
+          <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
+          <span class="upload-hint">A sample image/video shows until you upload your own. Videos must be 8s or shorter.</span>
+          <p id="upload-error" class="upload-error"></p>
+        </div>
       </div>
-      <p id="upload-error" class="upload-error"></p>
 
       <div id="composer" class="composer composer-disabled">
         <div class="composer-header">
@@ -75,12 +99,7 @@
 
         <div class="composer-caption-wrap">
           <strong>riversidebooks</strong>
-          <div
-            id="composer-caption"
-            class="composer-caption"
-            contenteditable="true"
-            data-placeholder="Write a caption, or generate one with AI below..."
-          ></div>
+          <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
         </div>
         <div
           id="composer-hashtags"
@@ -89,20 +108,6 @@
           data-placeholder="#hashtags"
         ></div>
       </div>
-
-      <div class="ai-generate-row">
-        <button id="ai-generate-btn" type="button" disabled>&#10024; Generate with AI</button>
-        <div class="pill-field hidden" id="tone-field">
-          <span class="pill-field-label">Tone</span>
-          <div class="pill-group" id="tone-pills">
-            <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
-            <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
-            <button type="button" class="pill" data-value="Playful">Playful</button>
-            <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
-          </div>
-        </div>
-      </div>
-      <p id="image-idea-line"></p>
     </section>
 
     <section class="card">
