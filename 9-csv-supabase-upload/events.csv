@@ -1,0 +1,19 @@
+event_id,event_name,event_date,event_time,event_location,event_description,book_id,ticket_price
+EVENT-001,Author Reading: Secret Rain,2026-10-09,11:00,Riverside Books Reading Room,Join us for a reading and q&a.,BOOK-031,0.00
+EVENT-002,Saturday Story Hour: Distant Maps,2026-10-01,11:00,Riverside Books Children's Corner,A lively read-aloud with a craft to follow.,BOOK-034,12.00
+EVENT-003,Meet the Illustrator: The Broken Market,2027-01-31,11:00,Riverside Books Children's Corner,A hands-on drawing session for young readers.,BOOK-019,0.00
+EVENT-004,Cookbook Tasting: Salt Stars,2026-12-25,19:00,Riverside Books Reading Room,Sample recipes from the featured cookbook.,BOOK-013,0.00
+EVENT-005,Staff Picks Night,2026-11-18,11:00,Riverside Books Main Floor,Booksellers share their current favorites.,,8.00
+EVENT-006,Author Reading: The Broken Market,2026-09-26,14:00,Riverside Books Reading Room,Join us for a reading and q&a.,BOOK-019,10.00
+EVENT-007,Local History Talk,2026-10-11,14:00,Riverside Books Reading Room,A historian shares stories from the riverfront.,BOOK-017,0.00
+EVENT-008,Cookbook Tasting: The Lighthouse of Wind,2026-10-11,10:30,Riverside Books Reading Room,Sample recipes from the featured cookbook.,BOOK-017,5.00
+EVENT-009,Holiday Gift Fair,2026-12-30,18:30,Riverside Books Main Floor,Browse curated gifts and seasonal favorites.,,0.00
+EVENT-010,Local History Talk,2027-02-27,19:00,Riverside Books Reading Room,A historian shares stories from the riverfront.,BOOK-027,0.00
+EVENT-011,Local History Talk,2027-02-08,11:00,Riverside Books Reading Room,A historian shares stories from the riverfront.,,10.00
+EVENT-012,Local History Talk,2027-01-18,14:00,Riverside Books Reading Room,A historian shares stories from the riverfront.,,10.00
+EVENT-013,Book Club Discussion: Blue Shadows,2026-10-07,10:30,Riverside Books Reading Room,Join our monthly book club discussion.,BOOK-027,0.00
+EVENT-014,Book Club Discussion: Blue Shadows,2027-01-31,11:00,Riverside Books Reading Room,Join our monthly book club discussion.,BOOK-027,0.00
+EVENT-015,Holiday Gift Fair,2026-11-17,19:00,Riverside Books Main Floor,Browse curated gifts and seasonal favorites.,BOOK-022,0.00
+EVENT-016,Cookbook Tasting: The Hidden River,2027-01-05,19:00,Riverside Books Reading Room,Sample recipes from the featured cookbook.,BOOK-029,0.00
+EVENT-017,Staff Picks Night,2026-11-22,11:00,Riverside Books Main Floor,Booksellers share their current favorites.,BOOK-013,0.00
+EVENT-018,Author Reading: The Lighthouse of Wind,2026-10-29,11:00,Riverside Books Reading Room,Join us for a reading and q&a.,BOOK-017,8.00

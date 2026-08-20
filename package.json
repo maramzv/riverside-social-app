@@ -1,0 +1,24 @@
+{
+  "name": "riverside-social-app",
+  "version": "1.0.0",
+  "description": "A new project for building the Riverside social app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maramzv/riverside-social-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maramzv/riverside-social-app/issues"
+  },
+  "homepage": "https://github.com/maramzv/riverside-social-app#readme",
+  "dependencies": {
+    "@supabase/server": "^1.4.1"
+  }
+}
