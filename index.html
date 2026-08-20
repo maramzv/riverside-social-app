@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riverside Books — Marketing Content Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Riverside Books — Marketing Content Generator</h1>
+    <p>Pick a book or event, generate a caption, and log it for the store's socials.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>1. Pick something to promote</h2>
+      <div class="row">
+        <label>
+          Type
+          <select id="type-select">
+            <option value="Book">Book</option>
+            <option value="Event">Event</option>
+          </select>
+        </label>
+        <label class="grow">
+          Item
+          <select id="item-select">
+            <option value="">-- choose --</option>
+          </select>
+        </label>
+      </div>
+      <pre id="item-details"></pre>
+    </section>
+
+    <section class="card">
+      <h2>2. Generate a caption</h2>
+      <button id="generate-btn" disabled>Generate caption</button>
+      <textarea id="caption-text" rows="4" placeholder="Generated caption will appear here — feel free to edit it."></textarea>
+    </section>
+
+    <section class="card">
+      <h2>3. Save the post</h2>
+      <div class="row">
+        <label>
+          Platform
+          <select id="platform-select"></select>
+        </label>
+        <button id="save-btn" disabled>Save post</button>
+        <span id="save-status"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Post history</h2>
+      <button id="refresh-history-btn">Refresh</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Platform</th>
+            <th>Type</th>
+            <th>Related ID</th>
+            <th>Caption</th>
+            <th>Post ID</th>
+          </tr>
+        </thead>
+        <tbody id="history-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
