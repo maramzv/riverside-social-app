@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Riverside Books — Marketing Content Generator</h1>
-    <p>Pick a book or event, generate a caption, and log it for the store's socials.</p>
+    <p>Pick a book or event, compose a post, and schedule it for the store's socials.</p>
   </header>
 
   <main>
@@ -34,19 +34,83 @@
     </section>
 
     <section class="card">
-      <h2>2. Generate a caption</h2>
-      <button id="generate-btn" disabled>Generate caption</button>
-      <textarea id="caption-text" rows="4" placeholder="Generated caption will appear here — feel free to edit it."></textarea>
+      <h2>2. Compose the post</h2>
+
+      <div class="pill-field">
+        <span class="pill-field-label">Platform</span>
+        <div class="pill-group" id="platform-pills"></div>
+      </div>
+
+      <div class="pill-field">
+        <span class="pill-field-label">Post type</span>
+        <div class="pill-group" id="asset-pills">
+          <button type="button" class="pill selected" data-value="Text">Text only</button>
+          <button type="button" class="pill" data-value="Photo">Text + Photo</button>
+          <button type="button" class="pill" data-value="Video">Text + Video</button>
+        </div>
+      </div>
+
+      <div class="upload-field hidden" id="upload-field">
+        <label class="upload-label" for="media-upload">
+          <span id="upload-label-text">Upload photo</span>
+        </label>
+        <input type="file" id="media-upload" accept="image/*" hidden />
+        <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
+      </div>
+
+      <div id="composer" class="composer composer-disabled">
+        <div class="composer-header">
+          <div class="composer-avatar">RB</div>
+          <div>
+            <div class="composer-account">riversidebooks</div>
+            <div class="composer-platform-label" id="composer-platform-label">Instagram</div>
+          </div>
+        </div>
+
+        <div class="composer-media hidden" id="composer-media"></div>
+
+        <div class="composer-icons">&#9825; &#9998; &#8631;</div>
+
+        <div class="composer-caption-wrap">
+          <strong>riversidebooks</strong>
+          <div
+            id="composer-caption"
+            class="composer-caption"
+            contenteditable="true"
+            data-placeholder="Write a caption, or generate one with AI below..."
+          ></div>
+        </div>
+        <div
+          id="composer-hashtags"
+          class="composer-hashtags"
+          contenteditable="true"
+          data-placeholder="#hashtags"
+        ></div>
+      </div>
+
+      <div class="ai-generate-row">
+        <button id="ai-generate-btn" type="button" disabled>&#10024; Generate with AI</button>
+        <div class="pill-field hidden" id="tone-field">
+          <span class="pill-field-label">Tone</span>
+          <div class="pill-group" id="tone-pills">
+            <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
+            <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
+            <button type="button" class="pill" data-value="Playful">Playful</button>
+            <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
+          </div>
+        </div>
+      </div>
+      <p id="image-idea-line"></p>
     </section>
 
     <section class="card">
-      <h2>3. Save the post</h2>
+      <h2>3. Schedule the post</h2>
       <div class="row">
         <label>
-          Platform
-          <select id="platform-select"></select>
+          Post date
+          <input type="date" id="post-date" />
         </label>
-        <button id="save-btn" disabled>Save post</button>
+        <button id="schedule-btn" disabled>Schedule post</button>
         <span id="save-status"></span>
       </div>
     </section>
@@ -54,19 +118,41 @@
     <section class="card">
       <h2>4. Post history</h2>
       <button id="refresh-history-btn">Refresh</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Platform</th>
-            <th>Type</th>
-            <th>Related ID</th>
-            <th>Caption</th>
-            <th>Post ID</th>
-          </tr>
-        </thead>
-        <tbody id="history-body"></tbody>
-      </table>
+
+      <h3 class="history-subheading">Upcoming</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Platform</th>
+              <th>Item</th>
+              <th>Caption</th>
+            </tr>
+          </thead>
+          <tbody id="upcoming-body">
+            <tr class="empty-row"><td colspan="4">Nothing scheduled yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="history-subheading">Published</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Platform</th>
+              <th>Item</th>
+              <th>Caption</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody id="published-body">
+            <tr class="empty-row"><td colspan="5">Nothing published yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
