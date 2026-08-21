@@ -323,13 +323,13 @@ function clearUpload() {
   uploadError.textContent = "";
 }
 
-function getVideoDuration(url) {
-  return new Promise((resolve, reject) => {
-    const probe = document.createElement("video");
-    probe.preload = "metadata";
-    probe.onloadedmetadata = () => resolve(probe.duration);
-    probe.onerror = () => reject(new Error("Couldn't read that video file."));
-    probe.src = url;
+// Longer uploads aren't trimmed on disk — just looped to their first MAX_VIDEO_SECONDS in the preview.
+function clampVideoTo8Seconds(video) {
+  if (!video) return;
+  video.addEventListener("timeupdate", () => {
+    if (video.currentTime > MAX_VIDEO_SECONDS) {
+      video.currentTime = 0;
+    }
   });
 }
 
@@ -363,10 +363,12 @@ function renderComposerMedia() {
   const label = type === "Book" ? selectedItem.title : selectedItem.event_name;
 
   if (uploadedMediaUrl) {
-    composerMedia.innerHTML =
-      asset === "Photo"
-        ? `<img src="${uploadedMediaUrl}" alt="" class="composer-media-file" />`
-        : `<video src="${uploadedMediaUrl}" class="composer-media-file" controls muted autoplay loop playsinline></video>`;
+    if (asset === "Photo") {
+      composerMedia.innerHTML = `<img src="${uploadedMediaUrl}" alt="" class="composer-media-file" />`;
+    } else {
+      composerMedia.innerHTML = `<video src="${uploadedMediaUrl}" class="composer-media-file" controls muted autoplay loop playsinline></video>`;
+      clampVideoTo8Seconds(composerMedia.querySelector("video"));
+    }
     return;
   }
 
@@ -472,7 +474,10 @@ async function loadHistory() {
   }
 
   const today = todayStr();
-  const upcoming = data.filter((p) => p.post_date >= today).sort((a, b) => a.post_date.localeCompare(b.post_date));
+  const upcoming = data
+    .filter((p) => p.post_date >= today)
+    .sort((a, b) => a.post_date.localeCompare(b.post_date))
+    .slice(0, 5);
   const published = data.filter((p) => p.post_date < today).sort((a, b) => b.post_date.localeCompare(a.post_date));
 
   upcomingBody.innerHTML = "";
@@ -531,33 +536,13 @@ aiGenerateBtn.addEventListener("click", () => {
   toneField.classList.toggle("hidden");
 });
 
-uploadInput.addEventListener("change", async () => {
+uploadInput.addEventListener("change", () => {
   const file = uploadInput.files[0];
   if (!file) return;
-  const asset = selectedPillValue(assetPills);
   uploadError.textContent = "";
 
-  const candidateUrl = URL.createObjectURL(file);
-
-  if (asset === "Video") {
-    try {
-      const duration = await getVideoDuration(candidateUrl);
-      if (duration > MAX_VIDEO_SECONDS) {
-        URL.revokeObjectURL(candidateUrl);
-        uploadInput.value = "";
-        uploadError.textContent = `That video is ${duration.toFixed(1)}s — please upload one ${MAX_VIDEO_SECONDS}s or shorter.`;
-        return;
-      }
-    } catch (err) {
-      URL.revokeObjectURL(candidateUrl);
-      uploadInput.value = "";
-      uploadError.textContent = err.message;
-      return;
-    }
-  }
-
   if (uploadedMediaUrl) URL.revokeObjectURL(uploadedMediaUrl);
-  uploadedMediaUrl = candidateUrl;
+  uploadedMediaUrl = URL.createObjectURL(file);
   renderComposerMedia();
 });
 
