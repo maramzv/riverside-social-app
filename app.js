@@ -510,7 +510,8 @@ function updateAssetPillAvailability(platform) {
 }
 
 function renderComposerShell() {
-  const platform = selectedPillValue(platformPills) || "Instagram";
+  const rawPlatform = selectedPillValue(platformPills);
+  const platform = rawPlatform || "Instagram";
   const preview = PLATFORM_PREVIEW[platform] || PLATFORM_PREVIEW.Instagram;
   const template = COMPOSER_TEMPLATES[platform] || COMPOSER_TEMPLATES.Instagram;
 
@@ -518,7 +519,9 @@ function renderComposerShell() {
   composer.innerHTML = template(preview);
   bindComposerRefs();
   syncCaptionPreview();
-  updateAssetPillAvailability(platform);
+  // Only actually hide Text-only once a platform is really selected — before that,
+  // nothing is chosen yet, so there's nothing to restrict against.
+  updateAssetPillAvailability(rawPlatform);
   renderComposerMedia();
 }
 
