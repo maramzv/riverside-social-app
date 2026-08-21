@@ -14,22 +14,19 @@
 
   <main>
     <section class="card">
-      <h2>1. Pick something to promote</h2>
-      <div class="row">
-        <label>
-          Type
-          <select id="type-select">
-            <option value="Book">Book</option>
-            <option value="Event">Event</option>
-          </select>
-        </label>
-        <label class="grow">
-          Item
-          <select id="item-select">
-            <option value="">-- choose --</option>
-          </select>
-        </label>
+      <h2>What are you promoting?</h2>
+      <div class="pill-field">
+        <div class="pill-group" id="type-pills">
+          <button type="button" class="pill selected" data-value="Book">Book</button>
+          <button type="button" class="pill" data-value="Event">Event</button>
+        </div>
       </div>
+      <label class="item-select-label">
+        Item
+        <select id="item-select">
+          <option value="">-- choose --</option>
+        </select>
+      </label>
       <pre id="item-details"></pre>
     </section>
 

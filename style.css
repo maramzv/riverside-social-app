@@ -80,6 +80,14 @@ label {
   gap: 0.25rem;
 }
 
+.item-select-label {
+  margin-top: 0.4rem;
+}
+
+.item-select-label select {
+  width: 100%;
+}
+
 select,
 input[type="date"],
 textarea,

@@ -3,7 +3,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const typeSelect = document.getElementById("type-select");
+const typePills = document.getElementById("type-pills");
 const itemSelect = document.getElementById("item-select");
 const detailsBox = document.getElementById("item-details");
 
@@ -235,7 +235,7 @@ async function loadPlatforms() {
 // --- item picking --------------------------------------------------------
 
 function populateItemSelect() {
-  const type = typeSelect.value;
+  const type = selectedPillValue(typePills);
   const list = type === "Book" ? books : events;
 
   itemSelect.innerHTML = '<option value="">-- choose --</option>';
@@ -252,7 +252,7 @@ function populateItemSelect() {
 }
 
 function onItemChosen() {
-  const type = typeSelect.value;
+  const type = selectedPillValue(typePills);
   const id = itemSelect.value;
   const list = type === "Book" ? books : events;
   selectedItem =
@@ -359,7 +359,7 @@ function renderComposerMedia() {
   composerMedia.classList.remove("hidden");
   composerMedia.style.background = "";
 
-  const type = typeSelect.value;
+  const type = selectedPillValue(typePills);
   const label = type === "Book" ? selectedItem.title : selectedItem.event_name;
 
   if (uploadedMediaUrl) {
@@ -380,7 +380,7 @@ function renderComposerMedia() {
 
 function generateWithTone(tone) {
   if (!selectedItem) return;
-  const type = typeSelect.value;
+  const type = selectedPillValue(typePills);
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
   const hashtags = hashtagsFor(type, selectedItem);
@@ -400,7 +400,7 @@ function generatePostId() {
 
 async function schedulePost() {
   if (!selectedItem) return;
-  const type = typeSelect.value;
+  const type = selectedPillValue(typePills);
   const caption = captionInput.value.trim();
   if (!caption) {
     saveStatus.textContent = "Write or generate a caption first.";
@@ -515,7 +515,7 @@ async function loadHistory() {
 
 // --- wiring --------------------------------------------------------
 
-typeSelect.addEventListener("change", populateItemSelect);
+setupPillGroup(typePills, populateItemSelect);
 itemSelect.addEventListener("change", onItemChosen);
 
 setupPillGroup(platformPills, updateComposerPlatform);
