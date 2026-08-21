@@ -30,8 +30,6 @@ let composerMedia = null;
 let composerCaption = null;
 let composerHashtags = null;
 
-const imageIdeaLine = document.getElementById("image-idea-line");
-
 const postNowBtn = document.getElementById("post-now-btn");
 const scheduleToggleBtn = document.getElementById("schedule-toggle-btn");
 const schedulePanel = document.getElementById("schedule-panel");
@@ -228,21 +226,6 @@ const HASHTAG_BASE = {
   Event: ["#RiversideBooks", "#ShopLocal", "#BookEvents"],
 };
 
-const IMAGE_IDEAS = {
-  Book: {
-    Cozy: "Flatlay of the book with a warm drink and a soft blanket, natural window light.",
-    Hype: "Bold close-up of the cover with a 'JUST IN' sticker overlay, high-contrast lighting.",
-    Playful: "Candid shot of a staffer mid-laugh holding the book, colorful background.",
-    "Staff Pick": "Shelf photo with a handwritten 'staff pick' card tucked next to the book.",
-  },
-  Event: {
-    Cozy: "Soft-focus photo of the event space being set up, string lights in the background.",
-    Hype: "Countdown graphic with the event date in bold type over a photo of last year's crowd.",
-    Playful: "Short clip of staff prepping decorations, sped up and set to music.",
-    "Staff Pick": "Portrait of the host/author with a quote pulled from the event description.",
-  },
-};
-
 function genreHashtag(genre) {
   if (!genre) return null;
   const slug = genre
@@ -259,10 +242,6 @@ function hashtagsFor(type, item) {
   const genreTag = type === "Book" ? genreHashtag(item.genre) : null;
   if (genreTag) tags.push(genreTag);
   return tags;
-}
-
-function imageIdeaFor(type, tone) {
-  return IMAGE_IDEAS[type][tone];
 }
 
 function genreColor(seed) {
@@ -384,11 +363,18 @@ function clearItemSelection() {
 }
 
 function populateItemSelect() {
-  const type = selectedPillValue(typePills) || "Book";
-  itemSearchInput.placeholder = type === "Book" ? "Search books..." : "Search events...";
+  const type = selectedPillValue(typePills);
   itemSearchInput.value = "";
   closeItemList();
   clearItemSelection();
+
+  if (!type) {
+    itemSearchInput.disabled = true;
+    itemSearchInput.placeholder = "Choose Book or Event first";
+    return;
+  }
+  itemSearchInput.disabled = false;
+  itemSearchInput.placeholder = type === "Book" ? "Search books..." : "Search events...";
 }
 
 function renderItemList(query) {
@@ -468,7 +454,6 @@ function resetComposer() {
   syncCaptionPreview();
   currentHashtags = "";
   composerHashtags.textContent = "";
-  imageIdeaLine.textContent = "";
   clearUpload();
   renderComposerMedia();
 }
@@ -482,7 +467,6 @@ function enableComposer() {
   syncCaptionPreview();
   currentHashtags = "";
   composerHashtags.textContent = "";
-  imageIdeaLine.textContent = "";
   clearUpload();
   renderComposerMedia();
 }
@@ -598,7 +582,6 @@ async function generateWithTone(tone) {
   composerCaption.textContent = "Thinking...";
   currentHashtags = "";
   composerHashtags.textContent = "";
-  imageIdeaLine.textContent = "";
   setTonePillsDisabled(true);
 
   await wait(650);
@@ -607,14 +590,12 @@ async function generateWithTone(tone) {
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
   const hashtags = hashtagsFor(type, selectedItem);
-  const imageIdea = imageIdeaFor(type, tone);
 
   composerCaption.classList.remove("thinking");
   captionInput.value = caption;
   syncCaptionPreview();
   currentHashtags = hashtags.join(" ");
   composerHashtags.textContent = currentHashtags;
-  imageIdeaLine.textContent = `Visual idea: ${imageIdea}`;
   setTonePillsDisabled(false);
 }
 
@@ -664,8 +645,7 @@ async function publishPost(mode) {
     syncCaptionPreview();
     currentHashtags = "";
     composerHashtags.textContent = "";
-    imageIdeaLine.textContent = "";
-    schedulePanel.classList.add("hidden");
+      schedulePanel.classList.add("hidden");
     await loadHistory();
   }
 

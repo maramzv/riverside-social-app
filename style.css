@@ -136,6 +136,12 @@ label {
   width: 100%;
 }
 
+.combobox input[type="text"]:disabled {
+  background: #f4ede3;
+  color: #a99c8f;
+  cursor: not-allowed;
+}
+
 .combobox-list {
   position: absolute;
   z-index: 10;
@@ -214,13 +220,6 @@ button:disabled {
 
 #save-status {
   color: #4a3f38;
-}
-
-#image-idea-line {
-  color: #6b5d52;
-  font-size: 0.85rem;
-  font-style: italic;
-  margin: 0.5rem 0 0;
 }
 
 /* Pill selectors */
