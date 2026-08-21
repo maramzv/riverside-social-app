@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sf http://localhost:*)",
+      "mcp__Claude_Browser__read_console_messages",
+      "mcp__Claude_Browser__read_page"
+    ]
+  }
+}
