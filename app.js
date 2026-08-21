@@ -11,7 +11,6 @@ const detailsBox = document.getElementById("item-details");
 
 const platformPills = document.getElementById("platform-pills");
 const assetPills = document.getElementById("asset-pills");
-const toneField = document.getElementById("tone-field");
 const tonePills = document.getElementById("tone-pills");
 const aiGenerateBtn = document.getElementById("ai-generate-btn");
 
@@ -54,6 +53,7 @@ let uploadedMediaUrl = null;
 let itemListOptions = [];
 let itemListActiveIndex = -1;
 let currentHashtags = "";
+let selectedTone = null;
 
 // Matches the platform values actually in use in the shared Social Posts dataset.
 const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
@@ -443,13 +443,23 @@ function syncCaptionPreview() {
   composerCaption.textContent = captionInput.value;
 }
 
+function resetToneSelection() {
+  selectedTone = null;
+  selectPill(tonePills, null);
+}
+
+function updateGenerateButtonState() {
+  aiGenerateBtn.disabled = !(selectedItem && selectedTone);
+}
+
 function resetComposer() {
   composer.classList.add("composer-disabled");
-  aiGenerateBtn.disabled = true;
   postNowBtn.disabled = true;
   scheduleToggleBtn.disabled = true;
   schedulePanel.classList.add("hidden");
-  toneField.classList.add("hidden");
+  resetToneSelection();
+  setTonePillsDisabled(true);
+  updateGenerateButtonState();
   captionInput.value = "";
   syncCaptionPreview();
   currentHashtags = "";
@@ -460,9 +470,11 @@ function resetComposer() {
 
 function enableComposer() {
   composer.classList.remove("composer-disabled");
-  aiGenerateBtn.disabled = false;
   postNowBtn.disabled = false;
   scheduleToggleBtn.disabled = false;
+  resetToneSelection();
+  setTonePillsDisabled(false);
+  updateGenerateButtonState();
   captionInput.value = "";
   syncCaptionPreview();
   currentHashtags = "";
@@ -583,6 +595,7 @@ async function generateWithTone(tone) {
   currentHashtags = "";
   composerHashtags.textContent = "";
   setTonePillsDisabled(true);
+  aiGenerateBtn.disabled = true;
 
   await wait(650);
 
@@ -597,6 +610,7 @@ async function generateWithTone(tone) {
   currentHashtags = hashtags.join(" ");
   composerHashtags.textContent = currentHashtags;
   setTonePillsDisabled(false);
+  updateGenerateButtonState();
 }
 
 // --- scheduling / history --------------------------------------------------------
@@ -791,12 +805,16 @@ setupPillGroup(assetPills, () => {
   clearUpload();
   renderComposerMedia();
 });
-setupPillGroup(tonePills, (tone) => generateWithTone(tone));
+setupPillGroup(tonePills, (tone) => {
+  selectedTone = tone;
+  updateGenerateButtonState();
+});
 
 captionInput.addEventListener("input", syncCaptionPreview);
 
 aiGenerateBtn.addEventListener("click", () => {
-  toneField.classList.toggle("hidden");
+  if (!selectedItem || !selectedTone) return;
+  generateWithTone(selectedTone);
 });
 
 uploadInput.addEventListener("change", () => {
