@@ -49,7 +49,7 @@ main {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 380px;
     align-items: start;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   .compose-preview-col {
@@ -307,12 +307,14 @@ button:disabled {
 
 .compose-text-field textarea {
   margin-top: 0.35rem;
+  min-height: 130px;
 }
 
 /* Upload field */
 
 .upload-field {
-  flex: 0 0 200px;
+  flex: 1 1 220px;
+  max-width: 260px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

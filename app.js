@@ -242,10 +242,10 @@ async function loadPlatforms() {
   }
 
   platformPills.innerHTML = "";
-  platforms.forEach((p, i) => {
+  platforms.forEach((p) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "pill" + (i === 0 ? " selected" : "");
+    btn.className = "pill";
     btn.dataset.value = p.label;
     btn.textContent = p.label;
     platformPills.appendChild(btn);
@@ -271,7 +271,7 @@ function clearItemSelection() {
 }
 
 function populateItemSelect() {
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   itemSearchInput.placeholder = type === "Book" ? "Search books..." : "Search events...";
   itemSearchInput.value = "";
   closeItemList();
@@ -279,7 +279,7 @@ function populateItemSelect() {
 }
 
 function renderItemList(query) {
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   const list = type === "Book" ? books : events;
   const q = query.trim().toLowerCase();
 
@@ -325,7 +325,7 @@ function setActiveOption(index) {
 }
 
 function chooseItem(item) {
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   selectedItem = item;
   itemSearchInput.value = itemLabel(type, item);
   closeItemList();
@@ -433,7 +433,7 @@ function renderComposerMedia() {
   composerMedia.classList.remove("hidden");
   composerMedia.style.background = "";
 
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   const label = type === "Book" ? selectedItem.title : selectedItem.event_name;
 
   if (uploadedMediaUrl) {
@@ -475,7 +475,7 @@ async function generateWithTone(tone) {
 
   await wait(650);
 
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
   const hashtags = hashtagsFor(type, selectedItem);
@@ -497,7 +497,7 @@ function generatePostId() {
 
 async function publishPost(mode) {
   if (!selectedItem) return;
-  const type = selectedPillValue(typePills);
+  const type = selectedPillValue(typePills) || "Book";
   const caption = captionInput.value.trim();
   if (!caption) {
     saveStatus.textContent = "Write or generate a caption first.";
