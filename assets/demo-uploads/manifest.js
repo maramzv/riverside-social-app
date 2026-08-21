@@ -8,9 +8,20 @@ export const DEMO_UPLOADS = {
     { name: "cafe-corner.png", path: "assets/demo-uploads/images/cafe-corner.png" },
     { name: "event-space.png", path: "assets/demo-uploads/images/event-space.png" },
     { name: "window-display.png", path: "assets/demo-uploads/images/window-display.png" },
+    {
+      name: "pexels-esra-afsar-123882149-18132694.jpg",
+      path: "assets/demo-uploads/images/pexels-esra-afsar-123882149-18132694.jpg",
+    },
+    { name: "pexels-yunustug-29589095.jpg", path: "assets/demo-uploads/images/pexels-yunustug-29589095.jpg" },
   ],
   Video: [
     { name: "staff-pick-loop.webm", path: "assets/demo-uploads/videos/staff-pick-loop.webm" },
     { name: "countdown-loop.webm", path: "assets/demo-uploads/videos/countdown-loop.webm" },
+    { name: "12129507_2160_3840_30fps.mp4", path: "assets/demo-uploads/videos/12129507_2160_3840_30fps.mp4" },
+    { name: "13324114-uhd_2160_3840_24fps.mp4", path: "assets/demo-uploads/videos/13324114-uhd_2160_3840_24fps.mp4" },
+    { name: "13690752_1920_1080_100fps.mp4", path: "assets/demo-uploads/videos/13690752_1920_1080_100fps.mp4" },
+    { name: "14762878_1080_1920_30fps.mp4", path: "assets/demo-uploads/videos/14762878_1080_1920_30fps.mp4" },
+    { name: "6598853-hd_1080_1920_25fps.mp4", path: "assets/demo-uploads/videos/6598853-hd_1080_1920_25fps.mp4" },
+    { name: "8419552-hd_1920_1080_30fps.mp4", path: "assets/demo-uploads/videos/8419552-hd_1920_1080_30fps.mp4" },
   ],
 };

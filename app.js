@@ -609,7 +609,7 @@ function openFinder() {
     .map(
       (item, i) => `
         <button type="button" class="finder-item" data-index="${i}">
-          ${kind === "Video" ? `<video src="${item.path}" muted></video>` : `<img src="${item.path}" alt="" />`}
+          ${kind === "Video" ? `<video src="${item.path}" muted preload="metadata"></video>` : `<img src="${item.path}" alt="" loading="lazy" />`}
           <span class="finder-item-name">${item.name}</span>
         </button>
       `
