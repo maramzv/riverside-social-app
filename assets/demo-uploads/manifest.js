@@ -4,12 +4,21 @@
 // file, or it won't show up in the picker.
 export const DEMO_UPLOADS = {
   Photo: [
-    { name: "shelf-flatlay.png", path: "assets/demo-uploads/images/shelf-flatlay.png" },
-    {
-      name: "pexels-esra-afsar-123882149-18132694.jpg",
-      path: "assets/demo-uploads/images/pexels-esra-afsar-123882149-18132694.jpg",
-    },
+    { name: "pexels-alizada-saleh-530109889-17548877.jpg", path: "assets/demo-uploads/images/pexels-alizada-saleh-530109889-17548877.jpg" },
+    { name: "pexels-blue-14924122.jpg", path: "assets/demo-uploads/images/pexels-blue-14924122.jpg" },
+    { name: "pexels-chipi1189-38982928.jpg", path: "assets/demo-uploads/images/pexels-chipi1189-38982928.jpg" },
+    { name: "pexels-cottonbro-4861339.jpg", path: "assets/demo-uploads/images/pexels-cottonbro-4861339.jpg" },
+    { name: "pexels-esra-afsar-123882149-18132694.jpg", path: "assets/demo-uploads/images/pexels-esra-afsar-123882149-18132694.jpg" },
+    { name: "pexels-gu-ko-2150570603-38832264.jpg", path: "assets/demo-uploads/images/pexels-gu-ko-2150570603-38832264.jpg" },
+    { name: "pexels-kseniachernaya-3952084.jpg", path: "assets/demo-uploads/images/pexels-kseniachernaya-3952084.jpg" },
+    { name: "pexels-limonovdigital-8768445.jpg", path: "assets/demo-uploads/images/pexels-limonovdigital-8768445.jpg" },
+    { name: "pexels-mayaramombellifotografias-37824869.jpg", path: "assets/demo-uploads/images/pexels-mayaramombellifotografias-37824869.jpg" },
+    { name: "pexels-meyra-342797656-15444041.jpg", path: "assets/demo-uploads/images/pexels-meyra-342797656-15444041.jpg" },
+    { name: "pexels-pixabay-256431.jpg", path: "assets/demo-uploads/images/pexels-pixabay-256431.jpg" },
+    { name: "pexels-yasar-baskurt-706180077-26755336.jpg", path: "assets/demo-uploads/images/pexels-yasar-baskurt-706180077-26755336.jpg" },
+    { name: "pexels-ytalo-marcos-2149389074-31600273.jpg", path: "assets/demo-uploads/images/pexels-ytalo-marcos-2149389074-31600273.jpg" },
     { name: "pexels-yunustug-29589095.jpg", path: "assets/demo-uploads/images/pexels-yunustug-29589095.jpg" },
+    { name: "shelf-flatlay.png", path: "assets/demo-uploads/images/shelf-flatlay.png" },
   ],
   Video: [
     { name: "staff-pick-loop.webm", path: "assets/demo-uploads/videos/staff-pick-loop.webm" },
