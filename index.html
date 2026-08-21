@@ -21,12 +21,19 @@
           <button type="button" class="pill" data-value="Event">Event</button>
         </div>
       </div>
-      <label class="item-select-label">
-        Item
-        <select id="item-select">
-          <option value="">-- choose --</option>
-        </select>
-      </label>
+      <label class="item-select-label" for="item-search">Item</label>
+      <div class="combobox" id="item-combobox">
+        <input
+          type="text"
+          id="item-search"
+          autocomplete="off"
+          role="combobox"
+          aria-expanded="false"
+          aria-autocomplete="list"
+          placeholder="Search books..."
+        />
+        <ul class="combobox-list hidden" id="item-list" role="listbox"></ul>
+      </div>
       <pre id="item-details"></pre>
     </section>
 

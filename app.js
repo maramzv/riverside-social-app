@@ -4,7 +4,9 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const typePills = document.getElementById("type-pills");
-const itemSelect = document.getElementById("item-select");
+const itemCombobox = document.getElementById("item-combobox");
+const itemSearchInput = document.getElementById("item-search");
+const itemList = document.getElementById("item-list");
 const detailsBox = document.getElementById("item-details");
 
 const platformPills = document.getElementById("platform-pills");
@@ -48,6 +50,8 @@ let events = [];
 let selectedItem = null;
 let platformLinks = {};
 let uploadedMediaUrl = null;
+let itemListOptions = [];
+let itemListActiveIndex = -1;
 
 const PLATFORM_LINK_FIELDS = [
   { field: "instagram_link", label: "Instagram" },
@@ -241,35 +245,79 @@ async function loadPlatforms() {
 
 // --- item picking --------------------------------------------------------
 
-function populateItemSelect() {
-  const type = selectedPillValue(typePills);
-  const list = type === "Book" ? books : events;
+function itemLabel(type, item) {
+  return type === "Book" ? `${item.title} — ${item.author}` : item.event_name;
+}
 
-  itemSelect.innerHTML = '<option value="">-- choose --</option>';
-  for (const item of list) {
-    const opt = document.createElement("option");
-    opt.value = type === "Book" ? item.book_id : item.event_id;
-    opt.textContent = type === "Book" ? `${item.title} — ${item.author}` : item.event_name;
-    itemSelect.appendChild(opt);
-  }
+function itemId(type, item) {
+  return type === "Book" ? item.book_id : item.event_id;
+}
 
+function clearItemSelection() {
   selectedItem = null;
   detailsBox.textContent = "";
   resetComposer();
 }
 
-function onItemChosen() {
+function populateItemSelect() {
   const type = selectedPillValue(typePills);
-  const id = itemSelect.value;
-  const list = type === "Book" ? books : events;
-  selectedItem =
-    list.find((i) => (type === "Book" ? i.book_id : i.event_id) === id) || null;
+  itemSearchInput.placeholder = type === "Book" ? "Search books..." : "Search events...";
+  itemSearchInput.value = "";
+  closeItemList();
+  clearItemSelection();
+}
 
-  if (!selectedItem) {
-    detailsBox.textContent = "";
-    resetComposer();
-    return;
+function renderItemList(query) {
+  const type = selectedPillValue(typePills);
+  const list = type === "Book" ? books : events;
+  const q = query.trim().toLowerCase();
+
+  itemListOptions = q ? list.filter((item) => itemLabel(type, item).toLowerCase().includes(q)) : list;
+  itemListActiveIndex = -1;
+
+  if (itemListOptions.length === 0) {
+    itemList.innerHTML = '<li class="combobox-empty">No matches</li>';
+  } else {
+    itemList.innerHTML = itemListOptions
+      .map(
+        (item, i) =>
+          `<li class="combobox-option" role="option" id="item-option-${i}" data-index="${i}">${itemLabel(type, item)}</li>`
+      )
+      .join("");
   }
+
+  openItemList();
+}
+
+function openItemList() {
+  itemList.classList.remove("hidden");
+  itemSearchInput.setAttribute("aria-expanded", "true");
+}
+
+function closeItemList() {
+  itemList.classList.add("hidden");
+  itemSearchInput.setAttribute("aria-expanded", "false");
+  itemListActiveIndex = -1;
+}
+
+function setActiveOption(index) {
+  const options = itemList.querySelectorAll(".combobox-option");
+  options.forEach((el) => el.classList.remove("active"));
+  if (index >= 0 && options[index]) {
+    options[index].classList.add("active");
+    options[index].scrollIntoView({ block: "nearest" });
+    itemSearchInput.setAttribute("aria-activedescendant", options[index].id);
+  } else {
+    itemSearchInput.removeAttribute("aria-activedescendant");
+  }
+  itemListActiveIndex = index;
+}
+
+function chooseItem(item) {
+  const type = selectedPillValue(typePills);
+  selectedItem = item;
+  itemSearchInput.value = itemLabel(type, item);
+  closeItemList();
 
   detailsBox.textContent =
     type === "Book"
@@ -530,7 +578,49 @@ async function loadHistory() {
 // --- wiring --------------------------------------------------------
 
 setupPillGroup(typePills, populateItemSelect);
-itemSelect.addEventListener("change", onItemChosen);
+
+itemSearchInput.addEventListener("input", () => {
+  if (selectedItem) clearItemSelection();
+  renderItemList(itemSearchInput.value);
+});
+
+itemSearchInput.addEventListener("focus", () => {
+  renderItemList(itemSearchInput.value);
+});
+
+itemSearchInput.addEventListener("keydown", (e) => {
+  if (itemList.classList.contains("hidden") && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+    renderItemList(itemSearchInput.value);
+    return;
+  }
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    setActiveOption(Math.min(itemListActiveIndex + 1, itemListOptions.length - 1));
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    setActiveOption(Math.max(itemListActiveIndex - 1, 0));
+  } else if (e.key === "Enter") {
+    if (itemListActiveIndex >= 0 && itemListOptions[itemListActiveIndex]) {
+      e.preventDefault();
+      chooseItem(itemListOptions[itemListActiveIndex]);
+    }
+  } else if (e.key === "Escape") {
+    closeItemList();
+  }
+});
+
+itemList.addEventListener("mousedown", (e) => {
+  // mousedown (not click) fires before the input's blur, so the list is still in the DOM when we read it.
+  const option = e.target.closest(".combobox-option");
+  if (!option) return;
+  e.preventDefault();
+  chooseItem(itemListOptions[Number(option.dataset.index)]);
+});
+
+itemSearchInput.addEventListener("blur", () => {
+  closeItemList();
+  if (!selectedItem) itemSearchInput.value = "";
+});
 
 setupPillGroup(platformPills, updateComposerPlatform);
 setupPillGroup(assetPills, () => {

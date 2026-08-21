@@ -100,11 +100,58 @@ label {
 }
 
 .item-select-label {
+  display: block;
   margin-top: 0.4rem;
+  font-size: 0.85rem;
 }
 
-.item-select-label select {
+.combobox {
+  position: relative;
+  margin-top: 0.25rem;
+}
+
+.combobox input[type="text"] {
   width: 100%;
+}
+
+.combobox-list {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(43, 35, 32, 0.12);
+}
+
+.combobox-list.hidden {
+  display: none;
+}
+
+.combobox-option {
+  padding: 0.45rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.combobox-option.active,
+.combobox-option:hover {
+  background: #f4ede3;
+}
+
+.combobox-empty {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  color: #8a7d70;
+  font-style: italic;
 }
 
 select,
