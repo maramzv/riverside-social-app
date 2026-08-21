@@ -127,11 +127,17 @@
     </section>
 
     <section class="card">
-      <h2>4. Post history</h2>
-      <button id="refresh-history-btn">Refresh</button>
+      <div class="history-header">
+        <h2>4. Post history</h2>
+        <button id="refresh-history-btn">Refresh</button>
+      </div>
 
-      <h3 class="history-subheading">Upcoming</h3>
-      <div class="table-scroll">
+      <div class="pill-group" id="history-tabs">
+        <button type="button" class="pill selected" data-value="upcoming">Upcoming <span id="upcoming-count" class="pill-count"></span></button>
+        <button type="button" class="pill" data-value="published">Published <span id="published-count" class="pill-count"></span></button>
+      </div>
+
+      <div class="table-scroll history-panel" id="upcoming-panel">
         <table>
           <thead>
             <tr>
@@ -147,8 +153,7 @@
         </table>
       </div>
 
-      <h3 class="history-subheading">Published</h3>
-      <div class="table-scroll">
+      <div class="table-scroll history-panel hidden" id="published-panel">
         <table>
           <thead>
             <tr>

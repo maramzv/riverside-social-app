@@ -35,8 +35,13 @@ const scheduleBtn = document.getElementById("schedule-btn");
 const saveStatus = document.getElementById("save-status");
 
 const refreshHistoryBtn = document.getElementById("refresh-history-btn");
+const historyTabs = document.getElementById("history-tabs");
+const upcomingPanel = document.getElementById("upcoming-panel");
+const publishedPanel = document.getElementById("published-panel");
 const upcomingBody = document.getElementById("upcoming-body");
 const publishedBody = document.getElementById("published-body");
+const upcomingCount = document.getElementById("upcoming-count");
+const publishedCount = document.getElementById("published-count");
 
 let books = [];
 let events = [];
@@ -477,11 +482,12 @@ async function loadHistory() {
   }
 
   const today = todayStr();
-  const upcoming = data
-    .filter((p) => p.post_date >= today)
-    .sort((a, b) => a.post_date.localeCompare(b.post_date))
-    .slice(0, 5);
+  const upcomingAll = data.filter((p) => p.post_date >= today).sort((a, b) => a.post_date.localeCompare(b.post_date));
+  const upcoming = upcomingAll.slice(0, 5);
   const published = data.filter((p) => p.post_date < today).sort((a, b) => b.post_date.localeCompare(a.post_date));
+
+  upcomingCount.textContent = `(${upcomingAll.length})`;
+  publishedCount.textContent = `(${published.length})`;
 
   upcomingBody.innerHTML = "";
   if (upcoming.length === 0) {
@@ -506,7 +512,7 @@ async function loadHistory() {
     for (const post of published) {
       const link = platformLinks[post.platform];
       const linkCell = link
-        ? `<td><a href="${link}" target="_blank" rel="noopener">View on ${post.platform}</a></td>`
+        ? `<td><a class="link-chip" href="${link}" target="_blank" rel="noopener" title="View on ${post.platform}" aria-label="View on ${post.platform}">&#8599;</a></td>`
         : `<td>&mdash;</td>`;
       publishedBody.appendChild(
         buildRow(post, [
@@ -561,6 +567,11 @@ setupPillGroup(publishModePills, (mode) => {
 
 scheduleBtn.addEventListener("click", schedulePost);
 refreshHistoryBtn.addEventListener("click", loadHistory);
+
+setupPillGroup(historyTabs, (tab) => {
+  upcomingPanel.classList.toggle("hidden", tab !== "upcoming");
+  publishedPanel.classList.toggle("hidden", tab !== "published");
+});
 
 postDateInput.value = todayStr();
 postDateInput.min = todayStr();

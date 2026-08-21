@@ -52,14 +52,29 @@ main {
   font-size: 1.1rem;
 }
 
-.history-subheading {
-  font-size: 0.95rem;
-  margin: 1.25rem 0 0.25rem;
-  color: #4a3f38;
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.history-subheading:first-of-type {
-  margin-top: 0.5rem;
+.history-header h2 {
+  margin: 0;
+}
+
+.pill-count {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.history-panel {
+  margin-top: 0.75rem;
+}
+
+.history-panel.hidden {
+  display: none;
 }
 
 .row {
@@ -455,4 +470,25 @@ tbody tr:hover {
 
 td a {
   color: var(--accent);
+}
+
+.link-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f4ede3;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.link-chip:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
 }
