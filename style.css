@@ -266,6 +266,10 @@ button:disabled {
   border-color: var(--accent);
 }
 
+.pill.hidden {
+  display: none;
+}
+
 .ai-generate-row {
   margin-top: 0.5rem;
 }

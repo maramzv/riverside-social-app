@@ -58,6 +58,10 @@ let selectedTone = null;
 // Matches the platform values actually in use in the shared Social Posts dataset.
 const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
 
+// These platforms don't have a text-only post format in real life — a feed post/pin/
+// video needs an image or video attached, so "Text only" isn't a real option for them.
+const PLATFORMS_REQUIRING_MEDIA = ["Instagram", "TikTok", "Pinterest"];
+
 // Social Media Accounts only has link fields for some of the platforms above —
 // the rest (Facebook, Pinterest) simply won't get a "view on" link in history yet.
 const PLATFORM_LINK_FIELDS = [
@@ -493,6 +497,18 @@ function bindComposerRefs() {
   });
 }
 
+function updateAssetPillAvailability(platform) {
+  const textOnlyPill = assetPills.querySelector('[data-value="Text"]');
+  const requiresMedia = PLATFORMS_REQUIRING_MEDIA.includes(platform);
+
+  textOnlyPill.classList.toggle("hidden", requiresMedia);
+
+  if (requiresMedia && selectedPillValue(assetPills) === "Text") {
+    selectPill(assetPills, "Photo");
+    clearUpload();
+  }
+}
+
 function renderComposerShell() {
   const platform = selectedPillValue(platformPills) || "Instagram";
   const preview = PLATFORM_PREVIEW[platform] || PLATFORM_PREVIEW.Instagram;
@@ -502,6 +518,7 @@ function renderComposerShell() {
   composer.innerHTML = template(preview);
   bindComposerRefs();
   syncCaptionPreview();
+  updateAssetPillAvailability(platform);
   renderComposerMedia();
 }
 
