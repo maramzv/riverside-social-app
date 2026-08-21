@@ -24,6 +24,9 @@ const clearUploadBtn = document.getElementById("clear-upload-btn");
 const uploadError = document.getElementById("upload-error");
 
 const composer = document.getElementById("composer");
+const composerAvatar = document.getElementById("composer-avatar");
+const composerAccount = document.getElementById("composer-account");
+const composerCaptionHandle = document.getElementById("composer-caption-handle");
 const composerPlatformLabel = document.getElementById("composer-platform-label");
 const composerMedia = document.getElementById("composer-media");
 const composerCaption = document.getElementById("composer-caption");
@@ -59,6 +62,13 @@ const PLATFORM_LINK_FIELDS = [
   { field: "x_link", label: "X" },
   { field: "website_link", label: "Website" },
 ];
+
+const PLATFORM_PREVIEW = {
+  Instagram: { icon: "\u{1F4F7}", handle: "riversidebooks", avatarBg: "#7a4a2c" },
+  TikTok: { icon: "\u{1F3B5}", handle: "@riversidebooks", avatarBg: "#1f1f1f" },
+  X: { icon: "✕", handle: "@riversidebooks", avatarBg: "#1a1a1a" },
+  Website: { icon: "\u{1F310}", handle: "riversidebooks.com", avatarBg: "#3a6ea5" },
+};
 
 const CAPTION_TEMPLATES = {
   Book: {
@@ -360,7 +370,12 @@ function enableComposer() {
 
 function updateComposerPlatform() {
   const platform = selectedPillValue(platformPills) || "Instagram";
-  composerPlatformLabel.textContent = platform;
+  const preview = PLATFORM_PREVIEW[platform] || PLATFORM_PREVIEW.Instagram;
+
+  composerPlatformLabel.textContent = `${preview.icon} ${platform}`;
+  composerAccount.textContent = preview.handle;
+  composerCaptionHandle.textContent = preview.handle;
+  composerAvatar.style.background = preview.avatarBg;
 }
 
 const PLACEHOLDER_ASSETS = {
@@ -435,18 +450,39 @@ function renderComposerMedia() {
   composerMedia.innerHTML = `${placeholderTag}<span class="composer-media-overlay-label">${label}</span>`;
 }
 
-function generateWithTone(tone) {
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function setTonePillsDisabled(disabled) {
+  for (const btn of tonePills.querySelectorAll(".pill")) {
+    btn.disabled = disabled;
+  }
+}
+
+async function generateWithTone(tone) {
   if (!selectedItem) return;
+
+  composerCaption.classList.add("thinking");
+  composerCaption.textContent = "Thinking...";
+  composerHashtags.textContent = "";
+  imageIdeaLine.textContent = "";
+  setTonePillsDisabled(true);
+
+  await wait(650);
+
   const type = selectedPillValue(typePills);
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
   const hashtags = hashtagsFor(type, selectedItem);
   const imageIdea = imageIdeaFor(type, tone);
 
+  composerCaption.classList.remove("thinking");
   captionInput.value = caption;
   syncCaptionPreview();
   composerHashtags.textContent = hashtags.join(" ");
   imageIdeaLine.textContent = `Visual idea: ${imageIdea}`;
+  setTonePillsDisabled(false);
 }
 
 // --- scheduling / history --------------------------------------------------------

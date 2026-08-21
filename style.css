@@ -451,6 +451,22 @@ button:disabled {
   color: #a99c8f;
 }
 
+.composer-caption.thinking {
+  color: #a99c8f;
+  font-style: italic;
+  animation: caption-pulse 1s ease-in-out infinite;
+}
+
+@keyframes caption-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .composer-hashtags {
   padding: 0.2rem 0.75rem 0.75rem;
   font-size: 0.8rem;
