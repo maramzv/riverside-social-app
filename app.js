@@ -189,12 +189,12 @@ const COMPOSER_TEMPLATES = {
   `,
 
   TikTok: (preview) => `
-    <div class="composer-tiktok-topbar">
-      <span class="dim">Following</span><span class="active">For You</span>
-      <span class="composer-tiktok-search">&#128269;</span>
-    </div>
     <div class="composer-tiktok-stage">
       <div class="composer-media hidden" id="composer-media"></div>
+      <div class="composer-tiktok-topbar-overlay">
+        <span class="dim">Following</span><span class="active">For You</span>
+        <span class="composer-tiktok-search">&#128269;</span>
+      </div>
       <div class="composer-tiktok-rail">
         <div class="composer-tiktok-avatar-wrap">
           <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
@@ -210,11 +210,11 @@ const COMPOSER_TEMPLATES = {
         <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
         <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
       </div>
-    </div>
-    <div class="composer-tiktok-navbar">
-      <span>&#8962;</span><span>&#128101;</span>
-      <span class="composer-tiktok-create">&#43;</span>
-      <span>&#128172;</span><span>&#128100;</span>
+      <div class="composer-tiktok-navbar-overlay">
+        <span>&#8962;</span><span>&#128101;</span>
+        <span class="composer-tiktok-create">&#43;</span>
+        <span>&#128172;</span><span>&#128100;</span>
+      </div>
     </div>
   `,
 };

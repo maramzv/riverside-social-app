@@ -610,17 +610,22 @@ button:disabled {
 
 /* TikTok */
 
-.composer-tiktok-topbar {
+.composer-tiktok-topbar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.9rem;
   padding: 0.6rem 0.75rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  background: #000;
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.composer-tiktok-topbar .active {
+.composer-tiktok-topbar-overlay .active {
   color: white;
   font-weight: 600;
 }
@@ -695,14 +700,20 @@ button:disabled {
   line-height: 1;
 }
 
-.composer-tiktok-navbar {
+.composer-tiktok-navbar-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 1rem;
-  background: #000;
+  padding: 0.5rem 1rem;
   color: white;
   font-size: 1.2rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
 }
 
 .composer-tiktok-create {
@@ -718,7 +729,7 @@ button:disabled {
   position: absolute;
   left: 0.75rem;
   right: 3rem;
-  bottom: 1rem;
+  bottom: 2.9rem;
   z-index: 2;
   color: white;
   font-size: 0.85rem;
