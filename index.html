@@ -107,13 +107,21 @@
     </section>
 
     <section class="card">
-      <h2>3. Schedule the post</h2>
-      <div class="row">
+      <h2>3. Publish the post</h2>
+      <div class="pill-field">
+        <div class="pill-group" id="publish-mode-pills">
+          <button type="button" class="pill selected" data-value="now">Post now</button>
+          <button type="button" class="pill" data-value="schedule">Schedule for later</button>
+        </div>
+      </div>
+      <div class="row hidden" id="schedule-date-row">
         <label>
           Post date
           <input type="date" id="post-date" />
         </label>
-        <button id="schedule-btn" disabled>Schedule post</button>
+      </div>
+      <div class="row">
+        <button id="schedule-btn" disabled>Post now</button>
         <span id="save-status"></span>
       </div>
     </section>

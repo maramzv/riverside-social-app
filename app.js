@@ -28,6 +28,8 @@ const composerCaption = document.getElementById("composer-caption");
 const composerHashtags = document.getElementById("composer-hashtags");
 const imageIdeaLine = document.getElementById("image-idea-line");
 
+const publishModePills = document.getElementById("publish-mode-pills");
+const scheduleDateRow = document.getElementById("schedule-date-row");
 const postDateInput = document.getElementById("post-date");
 const scheduleBtn = document.getElementById("schedule-btn");
 const saveStatus = document.getElementById("save-status");
@@ -412,10 +414,11 @@ async function schedulePost() {
   const hashtags = composerHashtags.textContent.trim();
   const captionWithTags = hashtags ? `${caption}\n\n${hashtags}` : caption;
   const platform = selectedPillValue(platformPills) || "Instagram";
-  const postDate = postDateInput.value || todayStr();
+  const publishMode = selectedPillValue(publishModePills) || "now";
+  const postDate = publishMode === "now" ? todayStr() : postDateInput.value || todayStr();
 
   scheduleBtn.disabled = true;
-  saveStatus.textContent = "Scheduling...";
+  saveStatus.textContent = publishMode === "now" ? "Posting..." : "Scheduling...";
 
   const row = {
     post_id: generatePostId(),
@@ -431,9 +434,9 @@ async function schedulePost() {
 
   if (error) {
     console.error("Failed to save post", error);
-    saveStatus.textContent = `Error scheduling post: ${error.message}`;
+    saveStatus.textContent = `Error ${publishMode === "now" ? "posting" : "scheduling"} post: ${error.message}`;
   } else {
-    saveStatus.textContent = postDate > todayStr() ? "Scheduled!" : "Saved!";
+    saveStatus.textContent = publishMode === "now" ? "Posted!" : "Scheduled!";
     captionInput.value = "";
     syncCaptionPreview();
     composerHashtags.textContent = "";
@@ -551,10 +554,16 @@ clearUploadBtn.addEventListener("click", () => {
   renderComposerMedia();
 });
 
+setupPillGroup(publishModePills, (mode) => {
+  scheduleDateRow.classList.toggle("hidden", mode !== "schedule");
+  scheduleBtn.textContent = mode === "schedule" ? "Schedule post" : "Post now";
+});
+
 scheduleBtn.addEventListener("click", schedulePost);
 refreshHistoryBtn.addEventListener("click", loadHistory);
 
 postDateInput.value = todayStr();
+postDateInput.min = todayStr();
 
 async function init() {
   // loadHistory needs books/events loaded first to resolve item titles for the table.

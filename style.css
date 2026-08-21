@@ -73,6 +73,10 @@ main {
   flex: 1;
 }
 
+.row.hidden {
+  display: none;
+}
+
 label {
   display: flex;
   flex-direction: column;
