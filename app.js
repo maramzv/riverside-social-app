@@ -65,10 +65,10 @@ const PLATFORM_LINK_FIELDS = [
 ];
 
 const PLATFORM_PREVIEW = {
-  Instagram: { icon: "\u{1F4F7}", handle: "riversidebooks", avatarBg: "#7a4a2c" },
-  TikTok: { icon: "\u{1F3B5}", handle: "@riversidebooks", avatarBg: "#1f1f1f" },
-  X: { icon: "✕", handle: "@riversidebooks", avatarBg: "#1a1a1a" },
-  Website: { icon: "\u{1F310}", handle: "riversidebooks.com", avatarBg: "#3a6ea5" },
+  Instagram: { handle: "riversidebooks", avatarBg: "#7a4a2c" },
+  TikTok: { handle: "@riversidebooks", avatarBg: "#1f1f1f" },
+  X: { handle: "@riversidebooks", avatarBg: "#1a1a1a" },
+  Website: { handle: "riversidebooks.com", avatarBg: "#3a6ea5" },
 };
 
 const CAPTION_TEMPLATES = {
@@ -376,7 +376,7 @@ function updateComposerPlatform() {
   const platform = selectedPillValue(platformPills) || "Instagram";
   const preview = PLATFORM_PREVIEW[platform] || PLATFORM_PREVIEW.Instagram;
 
-  composerPlatformLabel.textContent = `${preview.icon} ${platform}`;
+  composerPlatformLabel.textContent = platform;
   composerAccount.textContent = preview.handle;
   composerCaptionHandle.textContent = preview.handle;
   composerAvatar.style.background = preview.avatarBg;
