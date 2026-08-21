@@ -40,97 +40,99 @@
     <section class="card">
       <h2>2. Compose the post</h2>
 
-      <div class="pill-field">
-        <span class="pill-field-label">Platform</span>
-        <div class="pill-group" id="platform-pills"></div>
-      </div>
-
-      <div class="pill-field">
-        <span class="pill-field-label">Post type</span>
-        <div class="pill-group" id="asset-pills">
-          <button type="button" class="pill selected" data-value="Text">Text only</button>
-          <button type="button" class="pill" data-value="Photo">Text + Photo</button>
-          <button type="button" class="pill" data-value="Video">Text + Video</button>
-        </div>
-      </div>
-
-      <div class="compose-row">
-        <div class="compose-text-field">
-          <textarea
-            id="caption-input"
-            rows="3"
-            placeholder="Write a caption, or generate one with AI..."
-          ></textarea>
-          <div class="ai-generate-row">
-            <button id="ai-generate-btn" type="button" disabled>&#10024; Generate Text</button>
+      <div class="compose-grid">
+        <div class="compose-main">
+          <div class="pill-field">
+            <span class="pill-field-label">Platform</span>
+            <div class="pill-group" id="platform-pills"></div>
           </div>
-          <div class="tone-panel hidden" id="tone-field">
-            <p class="tone-panel-label">Pick a tone to generate the caption:</p>
-            <div class="pill-group" id="tone-pills">
-              <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
-              <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
-              <button type="button" class="pill" data-value="Playful">Playful</button>
-              <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
+
+          <div class="pill-field">
+            <span class="pill-field-label">Post type</span>
+            <div class="pill-group" id="asset-pills">
+              <button type="button" class="pill selected" data-value="Text">Text only</button>
+              <button type="button" class="pill" data-value="Photo">Text + Photo</button>
+              <button type="button" class="pill" data-value="Video">Text + Video</button>
             </div>
           </div>
-          <p id="image-idea-line"></p>
-        </div>
 
-        <div class="upload-field hidden" id="upload-field">
-          <label class="upload-label" for="media-upload">
-            <span id="upload-label-text">Upload photo</span>
-          </label>
-          <input type="file" id="media-upload" accept="image/*" hidden />
-          <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
-          <span class="upload-hint">A sample image/video shows until you upload your own. Videos loop after 8s in the preview.</span>
-          <p id="upload-error" class="upload-error"></p>
-        </div>
-      </div>
+          <div class="compose-row">
+            <div class="compose-text-field">
+              <textarea
+                id="caption-input"
+                rows="3"
+                placeholder="Write a caption, or generate one with AI..."
+              ></textarea>
+              <div class="ai-generate-row">
+                <button id="ai-generate-btn" type="button" disabled>&#10024; Generate Text</button>
+              </div>
+              <div class="tone-panel hidden" id="tone-field">
+                <p class="tone-panel-label">Pick a tone to generate the caption:</p>
+                <div class="pill-group" id="tone-pills">
+                  <button type="button" class="pill" data-value="Cozy">Cozy / Casual</button>
+                  <button type="button" class="pill" data-value="Hype">Urgent / Hype</button>
+                  <button type="button" class="pill" data-value="Playful">Playful</button>
+                  <button type="button" class="pill" data-value="Staff Pick">Staff Pick</button>
+                </div>
+              </div>
+              <p id="image-idea-line"></p>
+            </div>
 
-      <div id="composer" class="composer composer-disabled">
-        <div class="composer-header">
-          <div class="composer-avatar" id="composer-avatar">RB</div>
-          <div>
-            <div class="composer-account" id="composer-account">riversidebooks</div>
-            <div class="composer-platform-label" id="composer-platform-label">Instagram</div>
+            <div class="upload-field hidden" id="upload-field">
+              <label class="upload-label" for="media-upload">
+                <span id="upload-label-text">Upload photo</span>
+              </label>
+              <input type="file" id="media-upload" accept="image/*" hidden />
+              <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
+              <span class="upload-hint">A sample image/video shows until you upload your own. Videos loop after 8s in the preview.</span>
+              <p id="upload-error" class="upload-error"></p>
+            </div>
           </div>
         </div>
 
-        <div class="composer-media hidden" id="composer-media"></div>
+        <div class="compose-preview-col">
+          <div id="composer" class="composer composer-disabled">
+            <div class="composer-header">
+              <div class="composer-avatar" id="composer-avatar">RB</div>
+              <div>
+                <div class="composer-account" id="composer-account">riversidebooks</div>
+                <div class="composer-platform-label" id="composer-platform-label">Instagram</div>
+              </div>
+            </div>
 
-        <div class="composer-icons">&#9825; &#9998; &#8631;</div>
+            <div class="composer-media hidden" id="composer-media"></div>
 
-        <div class="composer-caption-wrap">
-          <strong id="composer-caption-handle">riversidebooks</strong>
-          <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+            <div class="composer-icons">&#9825; &#9998; &#8631;</div>
+
+            <div class="composer-caption-wrap">
+              <strong id="composer-caption-handle">riversidebooks</strong>
+              <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+            </div>
+            <div
+              id="composer-hashtags"
+              class="composer-hashtags"
+              contenteditable="true"
+              data-placeholder="#hashtags"
+            ></div>
+          </div>
         </div>
-        <div
-          id="composer-hashtags"
-          class="composer-hashtags"
-          contenteditable="true"
-          data-placeholder="#hashtags"
-        ></div>
       </div>
     </section>
 
     <section class="card">
       <h2>3. Publish the post</h2>
-      <div class="pill-field">
-        <div class="pill-group" id="publish-mode-pills">
-          <button type="button" class="pill selected" data-value="now">Post now</button>
-          <button type="button" class="pill" data-value="schedule">Schedule for later</button>
+      <div class="row">
+        <button id="post-now-btn" type="button" disabled>Post now</button>
+        <button id="schedule-toggle-btn" type="button" disabled>Schedule for later</button>
+      </div>
+      <div class="tone-panel hidden" id="schedule-panel">
+        <p class="tone-panel-label">Pick a date to schedule:</p>
+        <div class="row">
+          <input type="date" id="post-date" />
+          <button id="confirm-schedule-btn" type="button">Confirm schedule</button>
         </div>
       </div>
-      <div class="row hidden" id="schedule-date-row">
-        <label>
-          Post date
-          <input type="date" id="post-date" />
-        </label>
-      </div>
-      <div class="row">
-        <button id="schedule-btn" disabled>Post now</button>
-        <span id="save-status"></span>
-      </div>
+      <p id="save-status"></p>
     </section>
 
     <section class="card">
@@ -148,14 +150,13 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Platform</th>
+              <th>Post</th>
               <th>Item</th>
               <th>Caption</th>
             </tr>
           </thead>
           <tbody id="upcoming-body">
-            <tr class="empty-row"><td colspan="4">Nothing scheduled yet.</td></tr>
+            <tr class="empty-row"><td colspan="3">Nothing scheduled yet.</td></tr>
           </tbody>
         </table>
       </div>
@@ -164,15 +165,14 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Platform</th>
+              <th>Post</th>
               <th>Item</th>
               <th>Caption</th>
               <th>Link</th>
             </tr>
           </thead>
           <tbody id="published-body">
-            <tr class="empty-row"><td colspan="5">Nothing published yet.</td></tr>
+            <tr class="empty-row"><td colspan="4">Nothing published yet.</td></tr>
           </tbody>
         </table>
       </div>

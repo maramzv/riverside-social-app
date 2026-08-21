@@ -33,10 +33,11 @@ const composerCaption = document.getElementById("composer-caption");
 const composerHashtags = document.getElementById("composer-hashtags");
 const imageIdeaLine = document.getElementById("image-idea-line");
 
-const publishModePills = document.getElementById("publish-mode-pills");
-const scheduleDateRow = document.getElementById("schedule-date-row");
+const postNowBtn = document.getElementById("post-now-btn");
+const scheduleToggleBtn = document.getElementById("schedule-toggle-btn");
+const schedulePanel = document.getElementById("schedule-panel");
 const postDateInput = document.getElementById("post-date");
-const scheduleBtn = document.getElementById("schedule-btn");
+const confirmScheduleBtn = document.getElementById("confirm-schedule-btn");
 const saveStatus = document.getElementById("save-status");
 
 const refreshHistoryBtn = document.getElementById("refresh-history-btn");
@@ -346,7 +347,9 @@ function syncCaptionPreview() {
 function resetComposer() {
   composer.classList.add("composer-disabled");
   aiGenerateBtn.disabled = true;
-  scheduleBtn.disabled = true;
+  postNowBtn.disabled = true;
+  scheduleToggleBtn.disabled = true;
+  schedulePanel.classList.add("hidden");
   toneField.classList.add("hidden");
   captionInput.value = "";
   syncCaptionPreview();
@@ -359,7 +362,8 @@ function resetComposer() {
 function enableComposer() {
   composer.classList.remove("composer-disabled");
   aiGenerateBtn.disabled = false;
-  scheduleBtn.disabled = false;
+  postNowBtn.disabled = false;
+  scheduleToggleBtn.disabled = false;
   captionInput.value = "";
   syncCaptionPreview();
   composerHashtags.textContent = "";
@@ -491,7 +495,7 @@ function generatePostId() {
   return `POST-${crypto.randomUUID()}`;
 }
 
-async function schedulePost() {
+async function publishPost(mode) {
   if (!selectedItem) return;
   const type = selectedPillValue(typePills);
   const caption = captionInput.value.trim();
@@ -503,11 +507,12 @@ async function schedulePost() {
   const hashtags = composerHashtags.textContent.trim();
   const captionWithTags = hashtags ? `${caption}\n\n${hashtags}` : caption;
   const platform = selectedPillValue(platformPills) || "Instagram";
-  const publishMode = selectedPillValue(publishModePills) || "now";
-  const postDate = publishMode === "now" ? todayStr() : postDateInput.value || todayStr();
+  const postDate = mode === "now" ? todayStr() : postDateInput.value || todayStr();
 
-  scheduleBtn.disabled = true;
-  saveStatus.textContent = publishMode === "now" ? "Posting..." : "Scheduling...";
+  postNowBtn.disabled = true;
+  scheduleToggleBtn.disabled = true;
+  confirmScheduleBtn.disabled = true;
+  saveStatus.textContent = mode === "now" ? "Posting..." : "Scheduling...";
 
   const row = {
     post_id: generatePostId(),
@@ -523,17 +528,20 @@ async function schedulePost() {
 
   if (error) {
     console.error("Failed to save post", error);
-    saveStatus.textContent = `Error ${publishMode === "now" ? "posting" : "scheduling"} post: ${error.message}`;
+    saveStatus.textContent = `Error ${mode === "now" ? "posting" : "scheduling"} post: ${error.message}`;
   } else {
-    saveStatus.textContent = publishMode === "now" ? "Posted!" : "Scheduled!";
+    saveStatus.textContent = mode === "now" ? "Posted!" : "Scheduled!";
     captionInput.value = "";
     syncCaptionPreview();
     composerHashtags.textContent = "";
     imageIdeaLine.textContent = "";
+    schedulePanel.classList.add("hidden");
     await loadHistory();
   }
 
-  scheduleBtn.disabled = false;
+  postNowBtn.disabled = false;
+  scheduleToggleBtn.disabled = false;
+  confirmScheduleBtn.disabled = false;
 }
 
 function itemLabelFor(post) {
@@ -551,6 +559,22 @@ function buildRow(post, cells) {
   return tr;
 }
 
+function postMetaCell(post) {
+  return `<td class="post-meta-cell"><span class="meta-date">${formatDate(post.post_date)}</span><span class="platform-badge">${post.platform}</span></td>`;
+}
+
+function captionCell(caption) {
+  return `<td class="caption-cell"><span class="caption-text">${caption}</span><button type="button" class="caption-toggle">Show more</button></td>`;
+}
+
+function handleCaptionToggleClick(e) {
+  const btn = e.target.closest(".caption-toggle");
+  if (!btn) return;
+  const cell = btn.closest(".caption-cell");
+  const expanded = cell.classList.toggle("expanded");
+  btn.textContent = expanded ? "Show less" : "Show more";
+}
+
 async function loadHistory() {
   const { data, error } = await supabase
     .from("Social Posts")
@@ -560,7 +584,7 @@ async function loadHistory() {
 
   if (error) {
     console.error("Failed to load Social Posts", error);
-    upcomingBody.innerHTML = `<tr class="empty-row"><td colspan="4">Error loading history: ${error.message}</td></tr>`;
+    upcomingBody.innerHTML = `<tr class="empty-row"><td colspan="3">Error loading history: ${error.message}</td></tr>`;
     publishedBody.innerHTML = "";
     return;
   }
@@ -575,23 +599,18 @@ async function loadHistory() {
 
   upcomingBody.innerHTML = "";
   if (upcoming.length === 0) {
-    upcomingBody.innerHTML = '<tr class="empty-row"><td colspan="4">Nothing scheduled yet.</td></tr>';
+    upcomingBody.innerHTML = '<tr class="empty-row"><td colspan="3">Nothing scheduled yet.</td></tr>';
   } else {
     for (const post of upcoming) {
       upcomingBody.appendChild(
-        buildRow(post, [
-          `<td>${formatDate(post.post_date)}</td>`,
-          `<td><span class="platform-badge">${post.platform}</span></td>`,
-          `<td>${itemLabelFor(post)}</td>`,
-          `<td class="caption-cell">${post.caption_text}</td>`,
-        ])
+        buildRow(post, [postMetaCell(post), `<td>${itemLabelFor(post)}</td>`, captionCell(post.caption_text)])
       );
     }
   }
 
   publishedBody.innerHTML = "";
   if (published.length === 0) {
-    publishedBody.innerHTML = '<tr class="empty-row"><td colspan="5">Nothing published yet.</td></tr>';
+    publishedBody.innerHTML = '<tr class="empty-row"><td colspan="4">Nothing published yet.</td></tr>';
   } else {
     for (const post of published) {
       const link = platformLinks[post.platform];
@@ -600,9 +619,9 @@ async function loadHistory() {
         : `<td>&mdash;</td>`;
       publishedBody.appendChild(
         buildRow(post, [
-          `<td>${formatDate(post.post_date)}</td>`,
-          `<td><span class="platform-badge">${post.platform}</span></td>`,
+          postMetaCell(post),
           `<td>${itemLabelFor(post)}</td>`,
+          captionCell(post.caption_text),
           `<td class="caption-cell">${post.caption_text}</td>`,
           linkCell,
         ])
@@ -686,13 +705,17 @@ clearUploadBtn.addEventListener("click", () => {
   renderComposerMedia();
 });
 
-setupPillGroup(publishModePills, (mode) => {
-  scheduleDateRow.classList.toggle("hidden", mode !== "schedule");
-  scheduleBtn.textContent = mode === "schedule" ? "Schedule post" : "Post now";
+postNowBtn.addEventListener("click", () => publishPost("now"));
+
+scheduleToggleBtn.addEventListener("click", () => {
+  schedulePanel.classList.toggle("hidden");
 });
 
-scheduleBtn.addEventListener("click", schedulePost);
+confirmScheduleBtn.addEventListener("click", () => publishPost("schedule"));
+
 refreshHistoryBtn.addEventListener("click", loadHistory);
+upcomingBody.addEventListener("click", handleCaptionToggleClick);
+publishedBody.addEventListener("click", handleCaptionToggleClick);
 
 setupPillGroup(historyTabs, (tab) => {
   upcomingPanel.classList.toggle("hidden", tab !== "upcoming");

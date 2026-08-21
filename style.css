@@ -40,6 +40,28 @@ main {
   gap: 1.5rem;
 }
 
+@media (min-width: 1080px) {
+  main {
+    max-width: 1100px;
+  }
+
+  .compose-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .compose-preview-col {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .composer {
+    margin-top: 0;
+  }
+}
+
 .card {
   background: white;
   border: 1px solid var(--border);
@@ -517,9 +539,46 @@ tbody tr:hover {
   font-style: italic;
 }
 
+.post-meta-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.meta-date {
+  font-size: 0.78rem;
+  color: #6b5d52;
+}
+
 .caption-cell {
   max-width: 320px;
   white-space: pre-wrap;
+}
+
+.caption-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.caption-cell.expanded .caption-text {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.caption-toggle {
+  display: block;
+  margin-top: 0.2rem;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .platform-badge {
