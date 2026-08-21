@@ -469,7 +469,36 @@ button:disabled {
   pointer-events: none;
 }
 
-/* Instagram action row */
+/* Instagram */
+
+.composer-ig-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.composer-ig-wordmark {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.composer-ig-liked {
+  padding: 0.3rem 0.75rem 0;
+  font-size: 0.85rem;
+}
+
+.composer-ig-navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.1rem;
+}
 
 .composer-ig-actions {
   display: flex;
@@ -492,6 +521,8 @@ button:disabled {
 }
 
 .composer-fb-reactions {
+  display: flex;
+  justify-content: space-between;
   padding: 0.4rem 0.75rem 0;
   font-size: 0.78rem;
   color: #6b5d52;
@@ -642,6 +673,47 @@ button:disabled {
   font-size: 0.68rem;
 }
 
+.composer-tiktok-avatar-wrap {
+  position: relative;
+}
+
+.composer-tiktok-plus {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fe2c55;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.composer-tiktok-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: #000;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.composer-tiktok-create {
+  background: linear-gradient(90deg, #25f4ee, #fe2c55);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 0.15rem 0.7rem;
+}
+
 .composer-tiktok-caption-overlay {
   position: absolute;
   left: 0.75rem;
@@ -674,6 +746,12 @@ button:disabled {
 
 .composer-caption-wrap-plain {
   padding-top: 0.5rem;
+}
+
+.composer-pin-caption {
+  padding-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .composer-caption {

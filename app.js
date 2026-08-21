@@ -83,6 +83,12 @@ const PLATFORM_PREVIEW = {
 // rather than one shape with a couple of swapped-out bits.
 const COMPOSER_TEMPLATES = {
   Instagram: (preview) => `
+    <div class="composer-ig-topbar">
+      <span class="composer-ig-wordmark">Instagram</span>
+      <span class="composer-header-spacer"></span>
+      <span class="composer-header-icon">&#9825;</span>
+      <span class="composer-header-icon">&#9993;</span>
+    </div>
     <div class="composer-header">
       <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
       <div class="composer-account">${preview.handle}</div>
@@ -97,11 +103,15 @@ const COMPOSER_TEMPLATES = {
       <span class="composer-action-spacer"></span>
       <span class="composer-action-icon">&#128278;</span>
     </div>
+    <div class="composer-ig-liked">Liked by <strong>others</strong></div>
     <div class="composer-caption-wrap">
       <strong>${preview.handle}</strong>
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
     <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div class="composer-ig-navbar">
+      <span>&#8962;</span><span>&#128269;</span><span>&#10133;</span><span>&#9654;</span><span>&#9679;</span>
+    </div>
   `,
 
   Facebook: (preview) => `
@@ -119,7 +129,10 @@ const COMPOSER_TEMPLATES = {
     </div>
     <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
     <div class="composer-media hidden" id="composer-media"></div>
-    <div class="composer-fb-reactions">&#128077;&#10084;&#65039; 115 &middot; 23 comments &middot; 47 shares</div>
+    <div class="composer-fb-reactions">
+      <span>&#128077;&#10084;&#65039; 115</span>
+      <span class="composer-fb-reactions-right">23 Comments &nbsp; 47 Shares</span>
+    </div>
     <div class="composer-fb-actions">
       <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#8635; Share</span>
     </div>
@@ -152,7 +165,7 @@ const COMPOSER_TEMPLATES = {
       </span>
     </div>
     <div class="composer-media hidden" id="composer-media"></div>
-    <div class="composer-caption-wrap composer-caption-wrap-plain">
+    <div class="composer-caption-wrap composer-caption-wrap-plain composer-pin-caption">
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
     <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
@@ -174,7 +187,10 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-tiktok-stage">
       <div class="composer-media hidden" id="composer-media"></div>
       <div class="composer-tiktok-rail">
-        <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+        <div class="composer-tiktok-avatar-wrap">
+          <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+          <span class="composer-tiktok-plus">&#43;</span>
+        </div>
         <div class="composer-tiktok-rail-item">&#9825;<small>1.2K</small></div>
         <div class="composer-tiktok-rail-item">&#128172;<small>128</small></div>
         <div class="composer-tiktok-rail-item">&#128278;<small>256</small></div>
@@ -185,6 +201,11 @@ const COMPOSER_TEMPLATES = {
         <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
         <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
       </div>
+    </div>
+    <div class="composer-tiktok-navbar">
+      <span>&#8962;</span><span>&#128101;</span>
+      <span class="composer-tiktok-create">&#43;</span>
+      <span>&#128172;</span><span>&#128100;</span>
     </div>
   `,
 };
