@@ -5,9 +5,6 @@
 export const DEMO_UPLOADS = {
   Photo: [
     { name: "shelf-flatlay.png", path: "assets/demo-uploads/images/shelf-flatlay.png" },
-    { name: "cafe-corner.png", path: "assets/demo-uploads/images/cafe-corner.png" },
-    { name: "event-space.png", path: "assets/demo-uploads/images/event-space.png" },
-    { name: "window-display.png", path: "assets/demo-uploads/images/window-display.png" },
     {
       name: "pexels-esra-afsar-123882149-18132694.jpg",
       path: "assets/demo-uploads/images/pexels-esra-afsar-123882149-18132694.jpg",
