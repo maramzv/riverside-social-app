@@ -24,13 +24,12 @@ const clearUploadBtn = document.getElementById("clear-upload-btn");
 const uploadError = document.getElementById("upload-error");
 
 const composer = document.getElementById("composer");
-const composerAvatar = document.getElementById("composer-avatar");
-const composerAccount = document.getElementById("composer-account");
-const composerCaptionHandle = document.getElementById("composer-caption-handle");
-const composerPlatformLabel = document.getElementById("composer-platform-label");
-const composerMedia = document.getElementById("composer-media");
-const composerCaption = document.getElementById("composer-caption");
-const composerHashtags = document.getElementById("composer-hashtags");
+// The composer's inner markup is rebuilt per platform (see COMPOSER_TEMPLATES), so
+// these are re-queried after every rebuild instead of cached once at load.
+let composerMedia = null;
+let composerCaption = null;
+let composerHashtags = null;
+
 const imageIdeaLine = document.getElementById("image-idea-line");
 
 const postNowBtn = document.getElementById("post-now-btn");
@@ -56,6 +55,7 @@ let platformLinks = {};
 let uploadedMediaUrl = null;
 let itemListOptions = [];
 let itemListActiveIndex = -1;
+let currentHashtags = "";
 
 // Matches the platform values actually in use in the shared Social Posts dataset.
 const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
@@ -72,8 +72,119 @@ const PLATFORM_PREVIEW = {
   Instagram: { handle: "riversidebooks", avatarBg: "#7a4a2c" },
   TikTok: { handle: "@riversidebooks", avatarBg: "#1f1f1f" },
   X: { handle: "@riversidebooks", avatarBg: "#1a1a1a" },
-  Facebook: { handle: "riversidebooks", avatarBg: "#1a4d8f" },
-  Pinterest: { handle: "riversidebooks", avatarBg: "#b3211e" },
+  Facebook: { handle: "Riverside Books", avatarBg: "#1a4d8f" },
+  Pinterest: { handle: "Riverside Books", avatarBg: "#b3211e" },
+};
+
+// Each platform's real chrome is different enough (where the caption sits, what the
+// action row looks like, whether there's even a header) that these are full templates
+// rather than one shape with a couple of swapped-out bits.
+const COMPOSER_TEMPLATES = {
+  Instagram: (preview) => `
+    <div class="composer-header">
+      <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+      <div class="composer-account">${preview.handle}</div>
+      <span class="composer-header-spacer"></span>
+      <span class="composer-header-icon">&#8942;</span>
+    </div>
+    <div class="composer-media hidden" id="composer-media"></div>
+    <div class="composer-ig-actions">
+      <span class="composer-action-icon">&#9825;</span>
+      <span class="composer-action-icon">&#128172;</span>
+      <span class="composer-action-icon">&#10148;</span>
+      <span class="composer-action-spacer"></span>
+      <span class="composer-action-icon">&#128278;</span>
+    </div>
+    <div class="composer-caption-wrap">
+      <strong>${preview.handle}</strong>
+      <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+    </div>
+    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+  `,
+
+  Facebook: (preview) => `
+    <div class="composer-header">
+      <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+      <div>
+        <div class="composer-account">${preview.handle}</div>
+        <div class="composer-fb-meta">2h &middot; &#127760;</div>
+      </div>
+      <span class="composer-header-spacer"></span>
+      <span class="composer-header-icon">&#8942;</span>
+    </div>
+    <div class="composer-caption-wrap composer-caption-wrap-plain">
+      <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+    </div>
+    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div class="composer-media hidden" id="composer-media"></div>
+    <div class="composer-fb-reactions">&#128077;&#10084;&#65039; 115 &middot; 23 comments &middot; 47 shares</div>
+    <div class="composer-fb-actions">
+      <span>&#128077; Like</span><span>&#128172; Comment</span><span>&#8635; Share</span>
+    </div>
+  `,
+
+  X: (preview) => `
+    <div class="composer-header">
+      <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+      <div class="composer-x-namerow">
+        <span class="composer-account">Riverside Books</span>
+        <span class="composer-x-handle">${preview.handle} &middot; 2h</span>
+      </div>
+    </div>
+    <div class="composer-caption-wrap composer-caption-wrap-plain">
+      <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+    </div>
+    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div class="composer-media hidden" id="composer-media"></div>
+    <div class="composer-x-actions">
+      <span>&#128172; 12</span><span>&#8646; 8</span><span>&#9825; 64</span><span>&#128200; 1.2K</span>
+    </div>
+  `,
+
+  Pinterest: (preview) => `
+    <div class="composer-pin-topbar">
+      <span>&#8592;</span>
+      <span class="composer-pin-topbar-right">
+        <span>&#8593;</span><span>&#8942;</span>
+        <button type="button" class="pin-save-btn">Save</button>
+      </span>
+    </div>
+    <div class="composer-media hidden" id="composer-media"></div>
+    <div class="composer-caption-wrap composer-caption-wrap-plain">
+      <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+    </div>
+    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div class="composer-pin-footer">
+      <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+      <div class="composer-pin-footer-text">
+        <div class="composer-account">${preview.handle}</div>
+        <div class="composer-pin-followers">1.2k followers</div>
+      </div>
+      <button type="button" class="pin-follow-btn">Follow</button>
+    </div>
+  `,
+
+  TikTok: (preview) => `
+    <div class="composer-tiktok-topbar">
+      <span class="dim">Following</span><span class="active">For You</span>
+      <span class="composer-tiktok-search">&#128269;</span>
+    </div>
+    <div class="composer-tiktok-stage">
+      <div class="composer-media hidden" id="composer-media"></div>
+      <div class="composer-tiktok-rail">
+        <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
+        <div class="composer-tiktok-rail-item">&#9825;<small>1.2K</small></div>
+        <div class="composer-tiktok-rail-item">&#128172;<small>128</small></div>
+        <div class="composer-tiktok-rail-item">&#128278;<small>256</small></div>
+        <div class="composer-tiktok-rail-item">&#10132;<small>64</small></div>
+      </div>
+      <div class="composer-tiktok-caption-overlay">
+        <div class="composer-account">${preview.handle}</div>
+        <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
+        <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+      </div>
+    </div>
+  `,
 };
 
 const CAPTION_TEMPLATES = {
@@ -253,7 +364,7 @@ async function loadPlatforms() {
     platformPills.appendChild(btn);
   });
 
-  updateComposerPlatform();
+  renderComposerShell();
 }
 
 // --- item picking --------------------------------------------------------
@@ -355,6 +466,7 @@ function resetComposer() {
   toneField.classList.add("hidden");
   captionInput.value = "";
   syncCaptionPreview();
+  currentHashtags = "";
   composerHashtags.textContent = "";
   imageIdeaLine.textContent = "";
   clearUpload();
@@ -368,20 +480,33 @@ function enableComposer() {
   scheduleToggleBtn.disabled = false;
   captionInput.value = "";
   syncCaptionPreview();
+  currentHashtags = "";
   composerHashtags.textContent = "";
   imageIdeaLine.textContent = "";
   clearUpload();
   renderComposerMedia();
 }
 
-function updateComposerPlatform() {
+function bindComposerRefs() {
+  composerMedia = document.getElementById("composer-media");
+  composerCaption = document.getElementById("composer-caption");
+  composerHashtags = document.getElementById("composer-hashtags");
+  composerHashtags.textContent = currentHashtags;
+  composerHashtags.addEventListener("input", () => {
+    currentHashtags = composerHashtags.textContent;
+  });
+}
+
+function renderComposerShell() {
   const platform = selectedPillValue(platformPills) || "Instagram";
   const preview = PLATFORM_PREVIEW[platform] || PLATFORM_PREVIEW.Instagram;
+  const template = COMPOSER_TEMPLATES[platform] || COMPOSER_TEMPLATES.Instagram;
 
-  composerPlatformLabel.textContent = platform;
-  composerAccount.textContent = preview.handle;
-  composerCaptionHandle.textContent = preview.handle;
-  composerAvatar.style.background = preview.avatarBg;
+  composer.dataset.platform = platform;
+  composer.innerHTML = template(preview);
+  bindComposerRefs();
+  syncCaptionPreview();
+  renderComposerMedia();
 }
 
 const PLACEHOLDER_ASSETS = {
@@ -471,6 +596,7 @@ async function generateWithTone(tone) {
 
   composerCaption.classList.add("thinking");
   composerCaption.textContent = "Thinking...";
+  currentHashtags = "";
   composerHashtags.textContent = "";
   imageIdeaLine.textContent = "";
   setTonePillsDisabled(true);
@@ -486,7 +612,8 @@ async function generateWithTone(tone) {
   composerCaption.classList.remove("thinking");
   captionInput.value = caption;
   syncCaptionPreview();
-  composerHashtags.textContent = hashtags.join(" ");
+  currentHashtags = hashtags.join(" ");
+  composerHashtags.textContent = currentHashtags;
   imageIdeaLine.textContent = `Visual idea: ${imageIdea}`;
   setTonePillsDisabled(false);
 }
@@ -535,6 +662,7 @@ async function publishPost(mode) {
     saveStatus.textContent = mode === "now" ? "Posted!" : "Scheduled!";
     captionInput.value = "";
     syncCaptionPreview();
+    currentHashtags = "";
     composerHashtags.textContent = "";
     imageIdeaLine.textContent = "";
     schedulePanel.classList.add("hidden");
@@ -624,7 +752,6 @@ async function loadHistory() {
           postMetaCell(post),
           `<td>${itemLabelFor(post)}</td>`,
           captionCell(post.caption_text),
-          `<td class="caption-cell">${post.caption_text}</td>`,
           linkCell,
         ])
       );
@@ -679,7 +806,7 @@ itemSearchInput.addEventListener("blur", () => {
   if (!selectedItem) itemSearchInput.value = "";
 });
 
-setupPillGroup(platformPills, updateComposerPlatform);
+setupPillGroup(platformPills, renderComposerShell);
 setupPillGroup(assetPills, () => {
   clearUpload();
   renderComposerMedia();
@@ -726,6 +853,10 @@ setupPillGroup(historyTabs, (tab) => {
 
 postDateInput.value = todayStr();
 postDateInput.min = todayStr();
+
+// Bind composer refs synchronously so resetComposer()/enableComposer() never race
+// against the async loadPlatforms() call that would otherwise bind them first.
+renderComposerShell();
 
 async function init() {
   // loadHistory needs books/events loaded first to resolve item titles for the table.

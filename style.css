@@ -381,6 +381,11 @@ button:disabled {
   transition: opacity 0.15s;
 }
 
+.composer[data-platform="TikTok"] {
+  background: #000;
+  color: white;
+}
+
 .composer.composer-disabled {
   opacity: 0.5;
   pointer-events: none;
@@ -412,9 +417,13 @@ button:disabled {
   font-weight: 600;
 }
 
-.composer-platform-label {
-  font-size: 0.7rem;
+.composer-header-spacer {
+  flex: 1;
+}
+
+.composer-header-icon {
   color: #8a7d70;
+  font-size: 1.1rem;
 }
 
 .composer-media {
@@ -427,6 +436,10 @@ button:disabled {
   padding: 1rem;
   overflow: hidden;
   position: relative;
+}
+
+.composer[data-platform="Pinterest"] .composer-media {
+  aspect-ratio: 2 / 3;
 }
 
 .composer-media.hidden {
@@ -453,16 +466,211 @@ button:disabled {
   pointer-events: none;
 }
 
-.composer-icons {
+/* Instagram action row */
+
+.composer-ig-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   padding: 0.5rem 0.75rem 0.1rem;
   font-size: 1.2rem;
-  letter-spacing: 0.5rem;
   color: var(--ink);
+}
+
+.composer-action-spacer {
+  flex: 1;
+}
+
+/* Facebook */
+
+.composer-fb-meta {
+  font-size: 0.72rem;
+  color: #8a7d70;
+}
+
+.composer-fb-reactions {
+  padding: 0.4rem 0.75rem 0;
+  font-size: 0.78rem;
+  color: #6b5d52;
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+}
+
+.composer-fb-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.4rem 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  color: #6b5d52;
+  font-weight: 600;
+}
+
+/* X */
+
+.composer-x-namerow {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.composer-x-handle {
+  font-size: 0.78rem;
+  color: #8a7d70;
+  font-weight: 400;
+}
+
+.composer-x-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem 0.75rem;
+  font-size: 0.78rem;
+  color: #6b5d52;
+}
+
+/* Pinterest */
+
+.composer-pin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  font-size: 1.1rem;
+}
+
+.composer-pin-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1rem;
+}
+
+.pin-save-btn {
+  background: #cb1f27;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.composer-pin-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem 0.75rem;
+}
+
+.composer-pin-footer-text {
+  flex: 1;
+}
+
+.composer-pin-followers {
+  font-size: 0.75rem;
+  color: #8a7d70;
+}
+
+.pin-follow-btn {
+  background: var(--ink);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+/* TikTok */
+
+.composer-tiktok-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: #000;
+}
+
+.composer-tiktok-topbar .active {
+  color: white;
+  font-weight: 600;
+}
+
+.composer-tiktok-search {
+  margin-left: auto;
+  color: white;
+}
+
+.composer-tiktok-stage {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  overflow: hidden;
+}
+
+.composer-tiktok-stage .composer-media {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  padding: 0;
+  border-radius: 0;
+}
+
+.composer-tiktok-stage .composer-media-overlay-label {
+  display: none;
+}
+
+.composer-tiktok-rail {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  color: white;
+  z-index: 2;
+}
+
+.composer-tiktok-rail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.4rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.composer-tiktok-rail-item small {
+  font-size: 0.68rem;
+}
+
+.composer-tiktok-caption-overlay {
+  position: absolute;
+  left: 0.75rem;
+  right: 3rem;
+  bottom: 1rem;
+  z-index: 2;
+  color: white;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.composer-tiktok-caption-overlay .composer-account {
+  margin-bottom: 0.25rem;
+}
+
+.composer-tiktok-caption-overlay .composer-hashtags {
+  padding: 0.1rem 0 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.composer-tiktok-caption-overlay .composer-caption:empty::before,
+.composer-tiktok-caption-overlay .composer-hashtags:empty::before {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .composer-caption-wrap {
   padding: 0.3rem 0.75rem 0;
   font-size: 0.85rem;
+}
+
+.composer-caption-wrap-plain {
+  padding-top: 0.5rem;
 }
 
 .composer-caption {
