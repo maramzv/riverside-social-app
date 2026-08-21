@@ -134,40 +134,59 @@
         <button id="refresh-history-btn">Refresh</button>
       </div>
 
-      <div class="pill-group" id="history-tabs">
-        <button type="button" class="pill" data-value="upcoming">Upcoming <span id="upcoming-count" class="pill-count"></span></button>
-        <button type="button" class="pill" data-value="published">Published <span id="published-count" class="pill-count"></span></button>
+      <div class="pill-group" id="history-view-pills">
+        <button type="button" class="pill selected" data-value="list">List</button>
+        <button type="button" class="pill" data-value="calendar">Calendar</button>
       </div>
 
-      <div class="table-scroll history-panel" id="upcoming-panel">
-        <table>
-          <thead>
-            <tr>
-              <th>Post</th>
-              <th>Item</th>
-              <th>Caption</th>
-            </tr>
-          </thead>
-          <tbody id="upcoming-body">
-            <tr class="empty-row"><td colspan="3">Nothing scheduled yet.</td></tr>
-          </tbody>
-        </table>
+      <div id="history-list-view">
+        <div class="pill-group" id="history-tabs">
+          <button type="button" class="pill" data-value="upcoming">Upcoming <span id="upcoming-count" class="pill-count"></span></button>
+          <button type="button" class="pill" data-value="published">Published <span id="published-count" class="pill-count"></span></button>
+        </div>
+
+        <div class="table-scroll history-panel" id="upcoming-panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Post</th>
+                <th>Item</th>
+                <th>Caption</th>
+              </tr>
+            </thead>
+            <tbody id="upcoming-body">
+              <tr class="empty-row"><td colspan="3">Nothing scheduled yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-scroll history-panel hidden" id="published-panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Post</th>
+                <th>Item</th>
+                <th>Caption</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody id="published-body">
+              <tr class="empty-row"><td colspan="4">Nothing published yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="table-scroll history-panel hidden" id="published-panel">
-        <table>
-          <thead>
-            <tr>
-              <th>Post</th>
-              <th>Item</th>
-              <th>Caption</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody id="published-body">
-            <tr class="empty-row"><td colspan="4">Nothing published yet.</td></tr>
-          </tbody>
-        </table>
+      <div class="hidden" id="history-calendar-view">
+        <div class="calendar-header">
+          <button type="button" id="calendar-prev-btn" class="calendar-nav-btn">&#8592;</button>
+          <span id="calendar-month-label"></span>
+          <button type="button" id="calendar-next-btn" class="calendar-nav-btn">&#8594;</button>
+        </div>
+        <div class="calendar-weekdays">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
       </div>
     </section>
   </main>

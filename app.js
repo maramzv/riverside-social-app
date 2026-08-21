@@ -46,6 +46,9 @@ const confirmScheduleBtn = document.getElementById("confirm-schedule-btn");
 const saveStatus = document.getElementById("save-status");
 
 const refreshHistoryBtn = document.getElementById("refresh-history-btn");
+const historyViewPills = document.getElementById("history-view-pills");
+const historyListView = document.getElementById("history-list-view");
+const historyCalendarView = document.getElementById("history-calendar-view");
 const historyTabs = document.getElementById("history-tabs");
 const upcomingPanel = document.getElementById("upcoming-panel");
 const publishedPanel = document.getElementById("published-panel");
@@ -54,6 +57,11 @@ const publishedBody = document.getElementById("published-body");
 const upcomingCount = document.getElementById("upcoming-count");
 const publishedCount = document.getElementById("published-count");
 
+const calendarPrevBtn = document.getElementById("calendar-prev-btn");
+const calendarNextBtn = document.getElementById("calendar-next-btn");
+const calendarMonthLabel = document.getElementById("calendar-month-label");
+const calendarGrid = document.getElementById("calendar-grid");
+
 let books = [];
 let events = [];
 let selectedItem = null;
@@ -61,6 +69,8 @@ let platformLinks = {};
 let uploadedMediaUrl = null;
 let itemListOptions = [];
 let itemListActiveIndex = -1;
+let allPosts = [];
+let calendarViewDate = new Date();
 let currentHashtags = "";
 let selectedTone = null;
 
@@ -789,6 +799,63 @@ function handleCaptionToggleClick(e) {
   btn.textContent = expanded ? "Show less" : "Show more";
 }
 
+const MAX_CHIPS_PER_DAY = 3;
+
+function renderCalendar() {
+  const year = calendarViewDate.getFullYear();
+  const month = calendarViewDate.getMonth();
+  const today = todayStr();
+
+  calendarMonthLabel.textContent = calendarViewDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const postsByDay = {};
+  for (const post of allPosts) {
+    (postsByDay[post.post_date] ||= []).push(post);
+  }
+
+  const firstOfMonth = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const leadingBlanks = firstOfMonth.getDay();
+  const totalCells = Math.ceil((leadingBlanks + daysInMonth) / 7) * 7;
+
+  let html = "";
+  for (let i = 0; i < totalCells; i++) {
+    const dayNum = i - leadingBlanks + 1;
+    if (dayNum < 1 || dayNum > daysInMonth) {
+      html += `<div class="calendar-cell calendar-cell-empty"></div>`;
+      continue;
+    }
+
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
+    const posts = postsByDay[dateStr] || [];
+    const isToday = dateStr === today;
+
+    const chips = posts
+      .slice(0, MAX_CHIPS_PER_DAY)
+      .map(
+        (post) =>
+          `<div class="calendar-chip" title="${post.platform}: ${itemLabelFor(post)}">
+            <span class="platform-badge">${post.platform}</span> ${itemLabelFor(post)}
+          </div>`
+      )
+      .join("");
+    const overflow =
+      posts.length > MAX_CHIPS_PER_DAY ? `<div class="calendar-more">+${posts.length - MAX_CHIPS_PER_DAY} more</div>` : "";
+
+    html += `
+      <div class="calendar-cell${isToday ? " calendar-cell-today" : ""}">
+        <span class="calendar-daynum">${dayNum}</span>
+        <div class="calendar-chips">${chips}${overflow}</div>
+      </div>
+    `;
+  }
+
+  calendarGrid.innerHTML = html;
+}
+
 async function loadHistory() {
   const { data, error } = await supabase
     .from("Social Posts")
@@ -802,6 +869,9 @@ async function loadHistory() {
     publishedBody.innerHTML = "";
     return;
   }
+
+  allPosts = data;
+  renderCalendar();
 
   const today = todayStr();
   const upcomingAll = data.filter((p) => p.post_date >= today).sort((a, b) => a.post_date.localeCompare(b.post_date));
@@ -971,6 +1041,22 @@ publishedBody.addEventListener("click", handleCaptionToggleClick);
 setupPillGroup(historyTabs, (tab) => {
   upcomingPanel.classList.toggle("hidden", tab !== "upcoming");
   publishedPanel.classList.toggle("hidden", tab !== "published");
+});
+
+setupPillGroup(historyViewPills, (view) => {
+  historyListView.classList.toggle("hidden", view !== "list");
+  historyCalendarView.classList.toggle("hidden", view !== "calendar");
+  if (view === "calendar") renderCalendar();
+});
+
+calendarPrevBtn.addEventListener("click", () => {
+  calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() - 1, 1);
+  renderCalendar();
+});
+
+calendarNextBtn.addEventListener("click", () => {
+  calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() + 1, 1);
+  renderCalendar();
 });
 
 postDateInput.value = todayStr();
