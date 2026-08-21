@@ -70,17 +70,17 @@ const CAPTION_TEMPLATES = {
   },
   Event: {
     Cozy: [
-      ({ event_name, event_date }) => `Mark your calendar for ${event_name} on ${event_date}. See you there!`,
+      ({ event_name, event_date }) => `Mark your calendar for ${event_name} on ${formatDate(event_date)}. See you there!`,
     ],
     Hype: [
-      ({ event_name, event_date }) => `Tickets are moving for ${event_name} — don't miss it on ${event_date}!`,
-      ({ event_name, event_date }) => `Last call: ${event_name} is on ${event_date}. Save your spot now.`,
+      ({ event_name, event_date }) => `Tickets are moving for ${event_name} — don't miss it on ${formatDate(event_date)}!`,
+      ({ event_name, event_date }) => `Last call: ${event_name} is on ${formatDate(event_date)}. Save your spot now.`,
     ],
     Playful: [
-      ({ event_name, event_date }) => `Clear your calendar — ${event_name} is happening ${event_date} and it's going to be a good one.`,
+      ({ event_name, event_date }) => `Clear your calendar — ${event_name} is happening ${formatDate(event_date)} and it's going to be a good one.`,
     ],
     "Staff Pick": [
-      ({ event_name, event_date }) => `We're personally excited for ${event_name} on ${event_date}. Come say hi!`,
+      ({ event_name, event_date }) => `We're personally excited for ${event_name} on ${formatDate(event_date)}. Come say hi!`,
     ],
   },
 };
@@ -140,6 +140,25 @@ function pickRandom(list) {
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function ordinalSuffix(day) {
+  const j = day % 10;
+  const k = day % 100;
+  if (j === 1 && k !== 11) return "st";
+  if (j === 2 && k !== 12) return "nd";
+  if (j === 3 && k !== 13) return "rd";
+  return "th";
+}
+
+// Turns "2027-01-31" into "Sunday, January 31st" — nobody posts raw ISO dates on social.
+function formatDate(isoDateStr) {
+  if (!isoDateStr) return "";
+  const [year, month, day] = isoDateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+  const monthName = date.toLocaleDateString("en-US", { month: "long" });
+  return `${weekday}, ${monthName} ${day}${ordinalSuffix(day)}`;
 }
 
 // --- pill groups --------------------------------------------------------
@@ -248,7 +267,7 @@ function onItemChosen() {
   detailsBox.textContent =
     type === "Book"
       ? `${selectedItem.title} by ${selectedItem.author}\n\n${selectedItem.blurb}`
-      : `${selectedItem.event_name} — ${selectedItem.event_date}\n\n${selectedItem.event_description}`;
+      : `${selectedItem.event_name} — ${formatDate(selectedItem.event_date)}\n\n${selectedItem.event_description}`;
 
   enableComposer();
 }
@@ -463,7 +482,7 @@ async function loadHistory() {
     for (const post of upcoming) {
       upcomingBody.appendChild(
         buildRow(post, [
-          `<td>${post.post_date}</td>`,
+          `<td>${formatDate(post.post_date)}</td>`,
           `<td><span class="platform-badge">${post.platform}</span></td>`,
           `<td>${itemLabelFor(post)}</td>`,
           `<td class="caption-cell">${post.caption_text}</td>`,
@@ -483,7 +502,7 @@ async function loadHistory() {
         : `<td>&mdash;</td>`;
       publishedBody.appendChild(
         buildRow(post, [
-          `<td>${post.post_date}</td>`,
+          `<td>${formatDate(post.post_date)}</td>`,
           `<td><span class="platform-badge">${post.platform}</span></td>`,
           `<td>${itemLabelFor(post)}</td>`,
           `<td class="caption-cell">${post.caption_text}</td>`,
