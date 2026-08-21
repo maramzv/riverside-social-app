@@ -57,18 +57,23 @@ let uploadedMediaUrl = null;
 let itemListOptions = [];
 let itemListActiveIndex = -1;
 
+// Matches the platform values actually in use in the shared Social Posts dataset.
+const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
+
+// Social Media Accounts only has link fields for some of the platforms above —
+// the rest (Facebook, Pinterest) simply won't get a "view on" link in history yet.
 const PLATFORM_LINK_FIELDS = [
   { field: "instagram_link", label: "Instagram" },
   { field: "tiktok_link", label: "TikTok" },
   { field: "x_link", label: "X" },
-  { field: "website_link", label: "Website" },
 ];
 
 const PLATFORM_PREVIEW = {
   Instagram: { handle: "riversidebooks", avatarBg: "#7a4a2c" },
   TikTok: { handle: "@riversidebooks", avatarBg: "#1f1f1f" },
   X: { handle: "@riversidebooks", avatarBg: "#1a1a1a" },
-  Website: { handle: "riversidebooks.com", avatarBg: "#3a6ea5" },
+  Facebook: { handle: "riversidebooks", avatarBg: "#1a4d8f" },
+  Pinterest: { handle: "riversidebooks", avatarBg: "#b3211e" },
 };
 
 const CAPTION_TEMPLATES = {
@@ -230,24 +235,21 @@ async function loadPlatforms() {
   const { data, error } = await supabase.from("Social Media Accounts").select("*").limit(1);
   if (error) {
     console.error("Failed to load Social Media Accounts", error);
-    return;
   }
   const account = data && data[0];
-  const available = PLATFORM_LINK_FIELDS.filter((p) => account && account[p.field]);
-  const platforms = available.length ? available : PLATFORM_LINK_FIELDS;
 
   platformLinks = {};
-  for (const p of platforms) {
+  for (const p of PLATFORM_LINK_FIELDS) {
     if (account && account[p.field]) platformLinks[p.label] = account[p.field];
   }
 
   platformPills.innerHTML = "";
-  platforms.forEach((p) => {
+  PLATFORMS.forEach((label) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "pill";
-    btn.dataset.value = p.label;
-    btn.textContent = p.label;
+    btn.dataset.value = label;
+    btn.textContent = label;
     platformPills.appendChild(btn);
   });
 
