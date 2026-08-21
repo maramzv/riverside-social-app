@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+import { DEMO_UPLOADS } from "./assets/demo-uploads/manifest.js";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -17,10 +18,18 @@ const aiGenerateBtn = document.getElementById("ai-generate-btn");
 const captionInput = document.getElementById("caption-input");
 
 const uploadField = document.getElementById("upload-field");
+const openFinderBtn = document.getElementById("open-finder-btn");
 const uploadInput = document.getElementById("media-upload");
 const uploadLabelText = document.getElementById("upload-label-text");
 const clearUploadBtn = document.getElementById("clear-upload-btn");
 const uploadError = document.getElementById("upload-error");
+
+const finderOverlay = document.getElementById("finder-overlay");
+const finderTitle = document.getElementById("finder-title");
+const finderGrid = document.getElementById("finder-grid");
+const finderDeviceBtn = document.getElementById("finder-device-btn");
+const finderCancelBtn = document.getElementById("finder-cancel-btn");
+const finderOpenBtn = document.getElementById("finder-open-btn");
 
 const composer = document.getElementById("composer");
 // The composer's inner markup is rebuilt per platform (see COMPOSER_TEMPLATES), so
@@ -583,6 +592,46 @@ function updateUploadField() {
   clearUploadBtn.classList.toggle("hidden", !uploadedMediaUrl);
 }
 
+// --- fake file-picker modal (bundled demo media) --------------------------
+
+let finderSelectedPath = null;
+
+function openFinder() {
+  const asset = selectedPillValue(assetPills) || "Photo";
+  const kind = asset === "Video" ? "Video" : "Photo";
+  const items = DEMO_UPLOADS[kind] || [];
+
+  finderTitle.textContent = `Select a ${kind}`;
+  finderSelectedPath = null;
+  finderOpenBtn.disabled = true;
+
+  finderGrid.innerHTML = items
+    .map(
+      (item, i) => `
+        <button type="button" class="finder-item" data-index="${i}">
+          ${kind === "Video" ? `<video src="${item.path}" muted></video>` : `<img src="${item.path}" alt="" />`}
+          <span class="finder-item-name">${item.name}</span>
+        </button>
+      `
+    )
+    .join("");
+
+  finderOverlay.classList.remove("hidden");
+}
+
+function closeFinder() {
+  finderOverlay.classList.add("hidden");
+}
+
+function chooseFinderFile() {
+  if (!finderSelectedPath) return;
+  if (uploadedMediaUrl) URL.revokeObjectURL(uploadedMediaUrl);
+  uploadedMediaUrl = finderSelectedPath;
+  uploadError.textContent = "";
+  renderComposerMedia();
+  closeFinder();
+}
+
 function renderComposerMedia() {
   const asset = selectedPillValue(assetPills) || "Text";
   updateUploadField();
@@ -871,6 +920,40 @@ uploadInput.addEventListener("change", () => {
 clearUploadBtn.addEventListener("click", () => {
   clearUpload();
   renderComposerMedia();
+});
+
+openFinderBtn.addEventListener("click", openFinder);
+
+finderGrid.addEventListener("click", (e) => {
+  const btn = e.target.closest(".finder-item");
+  if (!btn) return;
+  for (const el of finderGrid.querySelectorAll(".finder-item")) el.classList.remove("selected");
+  btn.classList.add("selected");
+
+  const asset = selectedPillValue(assetPills) || "Photo";
+  const kind = asset === "Video" ? "Video" : "Photo";
+  finderSelectedPath = DEMO_UPLOADS[kind][Number(btn.dataset.index)].path;
+  finderOpenBtn.disabled = false;
+});
+
+finderGrid.addEventListener("dblclick", (e) => {
+  if (e.target.closest(".finder-item")) chooseFinderFile();
+});
+
+finderOpenBtn.addEventListener("click", chooseFinderFile);
+finderCancelBtn.addEventListener("click", closeFinder);
+
+finderDeviceBtn.addEventListener("click", () => {
+  closeFinder();
+  uploadInput.click();
+});
+
+finderOverlay.addEventListener("click", (e) => {
+  if (e.target === finderOverlay) closeFinder();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !finderOverlay.classList.contains("hidden")) closeFinder();
 });
 
 postNowBtn.addEventListener("click", () => publishPost("now"));

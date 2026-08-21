@@ -79,13 +79,29 @@
             </div>
 
             <div class="upload-field hidden" id="upload-field">
-              <label class="upload-label" for="media-upload">
+              <button type="button" id="open-finder-btn" class="upload-label">
                 <span id="upload-label-text">Upload photo</span>
-              </label>
+              </button>
               <input type="file" id="media-upload" accept="image/*" hidden />
               <button type="button" id="clear-upload-btn" class="hidden">Remove</button>
               <span class="upload-hint">A sample image/video shows until you upload your own. Videos loop after 8s in the preview.</span>
               <p id="upload-error" class="upload-error"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="finder-overlay hidden" id="finder-overlay">
+          <div class="finder-window">
+            <div class="finder-titlebar">
+              <span class="finder-dots"><span></span><span></span><span></span></span>
+              <span id="finder-title">Select a Photo</span>
+            </div>
+            <div class="finder-body" id="finder-grid"></div>
+            <div class="finder-footer">
+              <button type="button" id="finder-device-btn" class="finder-link-btn">Upload from this device&hellip;</button>
+              <span class="row-spacer"></span>
+              <button type="button" id="finder-cancel-btn" class="finder-secondary-btn">Cancel</button>
+              <button type="button" id="finder-open-btn" disabled>Open</button>
             </div>
           </div>
         </div>
