@@ -55,6 +55,12 @@
                 rows="5"
                 placeholder="Write a caption, or generate one with AI..."
               ></textarea>
+              <textarea
+                id="hashtag-input"
+                class="hashtag-textarea"
+                rows="2"
+                placeholder="#hashtags"
+              ></textarea>
               <div class="tone-inline" id="tone-field">
                 <p class="tone-inline-label">Need a caption? Pick a vibe to write it instantly:</p>
                 <div class="pill-group" id="tone-pills">
@@ -118,7 +124,6 @@
     <section class="card">
       <div class="history-header">
         <h2>4. Post history</h2>
-        <button id="refresh-history-btn">Refresh</button>
       </div>
 
       <div class="history-filter-bar">
@@ -127,9 +132,12 @@
           <button type="button" class="pill" data-value="published">Published <span id="published-count" class="pill-count"></span></button>
         </div>
 
-        <div class="pill-group view-switch" id="history-view-pills">
-          <button type="button" class="pill selected" data-value="list">List</button>
-          <button type="button" class="pill" data-value="calendar">Calendar</button>
+        <div class="view-switch-group">
+          <div class="pill-group view-switch" id="history-view-pills">
+            <button type="button" class="pill selected" data-value="list">List</button>
+            <button type="button" class="pill" data-value="calendar">Calendar</button>
+          </div>
+          <button type="button" id="refresh-history-btn" class="icon-btn" title="Refresh" aria-label="Refresh">&#8635;</button>
         </div>
       </div>
 

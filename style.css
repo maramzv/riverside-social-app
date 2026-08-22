@@ -111,6 +111,33 @@ main {
   gap: 0.35rem;
 }
 
+.view-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.icon-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 #history-list-view.hidden,
 #history-calendar-view.hidden {
   display: none;
@@ -448,7 +475,17 @@ button:disabled {
 
 .compose-text-field textarea {
   margin-top: 0.35rem;
+}
+
+#caption-input {
   min-height: 130px;
+}
+
+.hashtag-textarea {
+  min-height: 3rem;
+  color: #3a6ea5;
+  font-size: 0.9rem;
+  resize: vertical;
 }
 
 /* Upload field */
@@ -922,13 +959,7 @@ button:disabled {
   margin-bottom: 0.25rem;
 }
 
-.composer-tiktok-caption-overlay .composer-hashtags {
-  padding: 0.1rem 0 0;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.composer-tiktok-caption-overlay .composer-caption:empty::before,
-.composer-tiktok-caption-overlay .composer-hashtags:empty::before {
+.composer-tiktok-caption-overlay .composer-caption:empty::before {
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -961,13 +992,12 @@ button:disabled {
   padding: 0.2rem 0.75rem 0.75rem;
   font-size: 0.8rem;
   color: #3a6ea5;
-  outline: none;
-  min-height: 1.2em;
+  white-space: pre-wrap;
 }
 
-.composer-hashtags:empty::before {
-  content: attr(data-placeholder);
-  color: #a99c8f;
+.composer-tiktok-caption-overlay .composer-hashtags {
+  padding: 0.1rem 0 0;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* History tables */

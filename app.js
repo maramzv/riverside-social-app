@@ -16,6 +16,7 @@ const assetPills = document.getElementById("asset-pills");
 const tonePills = document.getElementById("tone-pills");
 
 const captionInput = document.getElementById("caption-input");
+const hashtagInput = document.getElementById("hashtag-input");
 
 const uploadField = document.getElementById("upload-field");
 const openFinderBtn = document.getElementById("open-finder-btn");
@@ -70,7 +71,6 @@ let platformLinks = {};
 let uploadedMediaUrl = null;
 let allPosts = [];
 let calendarViewDate = new Date();
-let currentHashtags = "";
 
 // Matches the platform values actually in use in the shared Social Posts dataset.
 const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
@@ -125,7 +125,7 @@ const COMPOSER_TEMPLATES = {
       <strong>${preview.handle}</strong>
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
-    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-ig-navbar">
       <span>&#8962;</span><span>&#128269;</span><span>&#10133;</span><span>&#9654;</span><span>&#9679;</span>
     </div>
@@ -144,7 +144,7 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-caption-wrap composer-caption-wrap-plain">
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
-    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-media hidden" id="composer-media"></div>
     <div class="composer-fb-reactions">
       <span>&#128077;&#10084;&#65039; 115</span>
@@ -166,7 +166,7 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-caption-wrap composer-caption-wrap-plain">
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
-    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-media hidden" id="composer-media"></div>
     <div class="composer-x-actions">
       <span>&#128172; 12</span><span>&#8646; 8</span><span>&#9825; 64</span><span>&#128200; 1.2K</span>
@@ -185,7 +185,7 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-caption-wrap composer-caption-wrap-plain composer-pin-caption">
       <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
     </div>
-    <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+    <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-pin-footer">
       <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
       <div class="composer-pin-footer-text">
@@ -216,7 +216,7 @@ const COMPOSER_TEMPLATES = {
       <div class="composer-tiktok-caption-overlay">
         <div class="composer-account">${preview.handle}</div>
         <span id="composer-caption" class="composer-caption" data-placeholder="Your caption will appear here..."></span>
-        <div id="composer-hashtags" class="composer-hashtags" contenteditable="true" data-placeholder="#hashtags"></div>
+        <div id="composer-hashtags" class="composer-hashtags"></div>
       </div>
       <div class="composer-tiktok-navbar-overlay">
         <span>&#8962;</span><span>&#128101;</span>
@@ -268,21 +268,42 @@ const HASHTAG_BASE = {
   Event: ["#RiversideBooks", "#ShopLocal", "#BookEvents"],
 };
 
-function genreHashtag(genre) {
-  if (!genre) return null;
-  const slug = genre
+const STORE_HASHTAG = "#RiversideBooks";
+
+// X's tight character budget can't absorb a full 3-5 tag block, so it gets
+// capped hard; other platforms comfortably fit the full curated set.
+const HASHTAG_LIMITS = { X: 2 };
+
+function hashtagLimitFor(platform) {
+  return HASHTAG_LIMITS[platform] ?? 5;
+}
+
+function toHashtagWord(text) {
+  if (!text) return null;
+  return text
     .replace(/'/g, "")
     .split(/[^a-zA-Z0-9]+/)
     .filter(Boolean)
     .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
     .join("");
-  return slug ? `#${slug}Reads` : null;
+}
+
+function genreHashtag(genre) {
+  const word = toHashtagWord(genre);
+  return word ? `#${word}Reads` : null;
+}
+
+function itemNameHashtag(type, item) {
+  const word = toHashtagWord(type === "Book" ? item.title : item.event_name);
+  return word ? `#${word}` : null;
 }
 
 function hashtagsFor(type, item) {
   const tags = [...HASHTAG_BASE[type]];
   const genreTag = type === "Book" ? genreHashtag(item.genre) : null;
   if (genreTag) tags.push(genreTag);
+  const nameTag = itemNameHashtag(type, item);
+  if (nameTag) tags.push(nameTag);
   return tags;
 }
 
@@ -473,6 +494,10 @@ function syncCaptionPreview() {
   composerCaption.textContent = captionInput.value;
 }
 
+function syncHashtagPreview() {
+  composerHashtags.textContent = hashtagInput.value;
+}
+
 function resetToneSelection() {
   selectPill(tonePills, null);
 }
@@ -486,8 +511,8 @@ function resetComposer() {
   setTonePillsDisabled(true);
   captionInput.value = "";
   syncCaptionPreview();
-  currentHashtags = "";
-  composerHashtags.textContent = "";
+  hashtagInput.value = "";
+  syncHashtagPreview();
   clearUpload();
   renderComposerMedia();
 }
@@ -500,8 +525,8 @@ function enableComposer() {
   setTonePillsDisabled(false);
   captionInput.value = "";
   syncCaptionPreview();
-  currentHashtags = "";
-  composerHashtags.textContent = "";
+  hashtagInput.value = STORE_HASHTAG;
+  syncHashtagPreview();
   clearUpload();
   renderComposerMedia();
 }
@@ -510,10 +535,6 @@ function bindComposerRefs() {
   composerMedia = document.getElementById("composer-media");
   composerCaption = document.getElementById("composer-caption");
   composerHashtags = document.getElementById("composer-hashtags");
-  composerHashtags.textContent = currentHashtags;
-  composerHashtags.addEventListener("input", () => {
-    currentHashtags = composerHashtags.textContent;
-  });
 }
 
 function updateAssetPillAvailability(platform) {
@@ -538,6 +559,7 @@ function renderComposerShell() {
   composer.innerHTML = template(preview);
   bindComposerRefs();
   syncCaptionPreview();
+  syncHashtagPreview();
   // Only actually hide Text-only once a platform is really selected — before that,
   // nothing is chosen yet, so there's nothing to restrict against.
   updateAssetPillAvailability(rawPlatform);
@@ -688,8 +710,8 @@ function setTonePillsDisabled(disabled) {
 async function generateWithTone(tone, pillEl) {
   if (!selectedItem) return;
 
-  currentHashtags = "";
-  composerHashtags.textContent = "";
+  hashtagInput.value = "";
+  syncHashtagPreview();
   setTonePillsDisabled(true);
   pillEl.classList.add("pill-loading");
 
@@ -698,12 +720,13 @@ async function generateWithTone(tone, pillEl) {
   const type = selectedItemType || "Book";
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
-  const hashtags = hashtagsFor(type, selectedItem);
+  const platform = selectedPillValue(platformPills) || "Instagram";
+  const hashtags = hashtagsFor(type, selectedItem).slice(0, hashtagLimitFor(platform));
 
   captionInput.value = caption;
   syncCaptionPreview();
-  currentHashtags = hashtags.join(" ");
-  composerHashtags.textContent = currentHashtags;
+  hashtagInput.value = hashtags.join(" ");
+  syncHashtagPreview();
   setTonePillsDisabled(false);
   pillEl.classList.remove("pill-loading");
   selectPill(tonePills, tone);
@@ -724,7 +747,7 @@ async function publishPost(mode) {
     return;
   }
 
-  const hashtags = composerHashtags.textContent.trim();
+  const hashtags = hashtagInput.value.trim();
   const captionWithTags = hashtags ? `${caption}\n\n${hashtags}` : caption;
   const platform = selectedPillValue(platformPills) || "Instagram";
   const postDate = mode === "now" ? todayStr() : postDateInput.value || todayStr();
@@ -756,8 +779,8 @@ async function publishPost(mode) {
     showToast(mode === "now" ? "Posted!" : "Scheduled!");
     captionInput.value = "";
     syncCaptionPreview();
-    currentHashtags = "";
-    composerHashtags.textContent = "";
+    hashtagInput.value = "";
+    syncHashtagPreview();
     schedulePanel.classList.add("hidden");
     await loadHistory();
   }
@@ -944,6 +967,7 @@ tonePills.addEventListener("click", (e) => {
 });
 
 captionInput.addEventListener("input", syncCaptionPreview);
+hashtagInput.addEventListener("input", syncHashtagPreview);
 
 uploadInput.addEventListener("change", () => {
   const file = uploadInput.files[0];
