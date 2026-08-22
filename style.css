@@ -99,12 +99,24 @@ main {
   display: none;
 }
 
-#history-view-pills {
+.history-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 0.75rem;
+}
+
+.view-switch {
+  gap: 0.35rem;
 }
 
 #history-list-view.hidden,
 #history-calendar-view.hidden {
+  display: none;
+}
+
+.pill-group.hidden {
   display: none;
 }
 

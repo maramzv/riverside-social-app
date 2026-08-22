@@ -1014,6 +1014,7 @@ setupPillGroup(historyTabs, (tab) => {
 setupPillGroup(historyViewPills, (view) => {
   historyListView.classList.toggle("hidden", view !== "list");
   historyCalendarView.classList.toggle("hidden", view !== "calendar");
+  historyTabs.classList.toggle("hidden", view !== "list");
   if (view === "calendar") renderCalendar();
 });
 

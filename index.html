@@ -121,17 +121,19 @@
         <button id="refresh-history-btn">Refresh</button>
       </div>
 
-      <div class="pill-group" id="history-view-pills">
-        <button type="button" class="pill selected" data-value="list">List</button>
-        <button type="button" class="pill" data-value="calendar">Calendar</button>
-      </div>
-
-      <div id="history-list-view">
+      <div class="history-filter-bar">
         <div class="pill-group" id="history-tabs">
           <button type="button" class="pill" data-value="upcoming">Upcoming <span id="upcoming-count" class="pill-count"></span></button>
           <button type="button" class="pill" data-value="published">Published <span id="published-count" class="pill-count"></span></button>
         </div>
 
+        <div class="pill-group view-switch" id="history-view-pills">
+          <button type="button" class="pill selected" data-value="list">List</button>
+          <button type="button" class="pill" data-value="calendar">Calendar</button>
+        </div>
+      </div>
+
+      <div id="history-list-view">
         <div class="table-scroll history-panel" id="upcoming-panel">
           <table>
             <thead>
