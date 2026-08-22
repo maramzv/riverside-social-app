@@ -1154,14 +1154,16 @@ button:disabled {
 /* History tables */
 
 .table-scroll {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 260px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
 table {
   width: 100%;
   min-width: 480px;
   border-collapse: collapse;
-  margin-top: 0.5rem;
   font-size: 0.9rem;
 }
 
@@ -1170,6 +1172,9 @@ th {
   padding: 0.5rem;
   background: #f4ede3;
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 td {

@@ -1064,11 +1064,10 @@ async function loadHistory() {
   renderCalendar();
 
   const today = todayStr();
-  const upcomingAll = data.filter((p) => p.post_date >= today).sort((a, b) => a.post_date.localeCompare(b.post_date));
-  const upcoming = upcomingAll.slice(0, 5);
+  const upcoming = data.filter((p) => p.post_date >= today).sort((a, b) => a.post_date.localeCompare(b.post_date));
   const published = data.filter((p) => p.post_date < today).sort((a, b) => b.post_date.localeCompare(a.post_date));
 
-  upcomingCount.textContent = `(${upcomingAll.length})`;
+  upcomingCount.textContent = `(${upcoming.length})`;
   publishedCount.textContent = `(${published.length})`;
 
   upcomingBody.innerHTML = "";
