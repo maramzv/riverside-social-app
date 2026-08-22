@@ -293,17 +293,57 @@ function genreHashtag(genre) {
   return word ? `#${word}Reads` : null;
 }
 
-function itemNameHashtag(type, item) {
-  const word = toHashtagWord(type === "Book" ? item.title : item.event_name);
+function bookTitleHashtag(title) {
+  const word = toHashtagWord(title);
   return word ? `#${word}` : null;
+}
+
+// Events don't have a genre field like Books do, so instead of one clean
+// category tag, this scans the event's own name/description for known
+// keywords (book club, story hour, cookbook, etc.) and tags whichever hit.
+const EVENT_KEYWORD_HASHTAGS = [
+  { pattern: /book\s*clubs?/i, tag: "#BookClub" },
+  { pattern: /story\s*time|story\s*hour/i, tag: "#StoryHour" },
+  { pattern: /signing/i, tag: "#BookSigning" },
+  { pattern: /author\s*(talk|visit|event|q&a)/i, tag: "#AuthorEvent" },
+  { pattern: /poetry/i, tag: "#PoetryNight" },
+  { pattern: /cookbook|cooking|recipe/i, tag: "#Cookbooks" },
+  { pattern: /histor(y|ical)/i, tag: "#History" },
+  { pattern: /kids|children|toddler/i, tag: "#KidsEvents" },
+  { pattern: /workshop|class/i, tag: "#Workshop" },
+  { pattern: /open\s*mic/i, tag: "#OpenMic" },
+  { pattern: /reading\s*group|discussion/i, tag: "#ReadingGroup" },
+  { pattern: /mystery|thriller/i, tag: "#MysteryReads" },
+  { pattern: /romance/i, tag: "#RomanceReads" },
+  { pattern: /sci-?fi|science\s*fiction|fantasy/i, tag: "#SciFiFantasy" },
+  { pattern: /holiday|christmas|halloween/i, tag: "#HolidayEvent" },
+  { pattern: /launch|release/i, tag: "#BookLaunch" },
+  { pattern: /book\s*sale|clearance/i, tag: "#BookSale" },
+];
+
+function eventKeywordHashtags(item) {
+  const text = `${item.event_name || ""} ${item.event_description || ""}`;
+  const tags = [];
+  for (const { pattern, tag } of EVENT_KEYWORD_HASHTAGS) {
+    if (tags.length >= 2) break;
+    if (pattern.test(text) && !tags.includes(tag)) tags.push(tag);
+  }
+  return tags;
 }
 
 function hashtagsFor(type, item) {
   const tags = [...HASHTAG_BASE[type]];
-  const genreTag = type === "Book" ? genreHashtag(item.genre) : null;
-  if (genreTag) tags.push(genreTag);
-  const nameTag = itemNameHashtag(type, item);
-  if (nameTag) tags.push(nameTag);
+  if (type === "Book") {
+    const genreTag = genreHashtag(item.genre);
+    if (genreTag) tags.push(genreTag);
+    const nameTag = bookTitleHashtag(item.title);
+    if (nameTag) tags.push(nameTag);
+  } else {
+    // Event names are full phrases ("Cookbook Tasting: The Hidden River"), so
+    // squashing the whole thing into one hashtag reads as noise, not a tag —
+    // the keyword tags above are the ones actually worth surfacing.
+    tags.push(...eventKeywordHashtags(item));
+  }
   return tags;
 }
 
