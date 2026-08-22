@@ -233,16 +233,42 @@ const COMPOSER_TEMPLATES = {
     </div>
     <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-media hidden" id="composer-media"></div>
+    <div class="composer-x-meta">12:00 PM &middot; Oct 14, 2023 &middot; 200.1K Views</div>
     <div class="composer-x-actions">
-      <span>&#128172; 12</span><span>&#8646; 8</span><span>&#9825; 64</span><span>&#128200; 1.2K</span>
+      <span class="composer-x-action">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-4.5 4v-4H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/></svg>
+        991
+      </span>
+      <span class="composer-x-action">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.65 6.35 14 2.7v2.55H7a4.75 4.75 0 0 0-4.75 4.75v2h1.5v-2A3.25 3.25 0 0 1 7 6.75h7v2.55l3.65-3.65Zm-11.3 11.3L10 21.3v-2.55h7A4.75 4.75 0 0 0 21.75 14v-2h-1.5v2A3.25 3.25 0 0 1 17 17.25h-7v-2.55l-3.65 3.65Z"/></svg>
+        1,581
+      </span>
+      <span class="composer-x-action">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.152 14.081 2.5 12.194 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg>
+        9,867
+      </span>
+      <span class="composer-x-action">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><polygon points="20 21 12 13.44 4 21 4 3 20 3 20 21"/></svg>
+        90
+      </span>
+      <span class="composer-x-action">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="15"/><polyline points="7.5 7.5 12 3 16.5 7.5"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg>
+      </span>
     </div>
   `,
 
   Pinterest: (preview) => `
     <div class="composer-pin-topbar">
-      <span>&#8592;</span>
+      <span class="composer-pin-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 4 7 12 15 20"/></svg>
+      </span>
       <span class="composer-pin-topbar-right">
-        <span>&#8593;</span><span>&#8942;</span>
+        <span class="composer-pin-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="15"/><polyline points="7.5 7.5 12 3 16.5 7.5"/><path d="M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></svg>
+        </span>
+        <span class="composer-pin-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+        </span>
         <button type="button" class="pin-save-btn">Save</button>
       </span>
     </div>

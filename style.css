@@ -860,12 +860,27 @@ button:disabled {
   font-weight: 400;
 }
 
+.composer-x-meta {
+  padding: 0.4rem 1rem 0;
+  font-size: 0.72rem;
+  color: #8a7d70;
+  border-top: 1px solid var(--border);
+  margin-top: 0.4rem;
+  padding-top: 0.5rem;
+}
+
 .composer-x-actions {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 1rem 0.75rem;
   font-size: 0.78rem;
   color: #6b5d52;
+}
+
+.composer-x-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 /* Pinterest */
@@ -883,6 +898,11 @@ button:disabled {
   align-items: center;
   gap: 0.7rem;
   font-size: 1rem;
+}
+
+.composer-pin-icon {
+  display: inline-flex;
+  color: var(--ink);
 }
 
 .pin-save-btn {
