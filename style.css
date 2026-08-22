@@ -949,9 +949,8 @@ tbody tr:hover {
 
 .post-meta-inner {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 8px;
 }
 
 .meta-date {
