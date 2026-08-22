@@ -564,9 +564,9 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #a3892f, #6e6b30, #3e4a1a, #556226);
+  background: linear-gradient(135deg, #a3892f, #8a5a35, #6e6b30, #3e4a1a, #556226);
   background-size: 300% 300%;
-  color: #f0e6da;
+  color: #ffffff;
   text-align: center;
   animation: composer-placeholder-gradient 6s ease-in-out infinite;
 }
@@ -617,7 +617,7 @@ button:disabled {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 0.85rem;
   font-style: italic;
-  color: #d8c8b8;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Instagram */
