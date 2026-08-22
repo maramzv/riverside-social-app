@@ -327,10 +327,6 @@ button:disabled {
   color: #4a3f38;
 }
 
-#save-status {
-  color: #4a3f38;
-}
-
 /* Pill selectors */
 
 .pill-field {
@@ -1225,4 +1221,49 @@ td a {
 
 #finder-open-btn:disabled {
   background: #c9bcae;
+}
+
+/* Toast */
+
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  background: var(--ink);
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(43, 35, 32, 0.35);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.toast-icon {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.toast-success .toast-icon {
+  color: #7bc47f;
+}
+
+.toast-error {
+  background: #7a2c2c;
+}
+
+.toast-error .toast-icon {
+  color: #f0b3b3;
 }

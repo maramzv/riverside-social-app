@@ -43,7 +43,7 @@ const scheduleToggleBtn = document.getElementById("schedule-toggle-btn");
 const schedulePanel = document.getElementById("schedule-panel");
 const postDateInput = document.getElementById("post-date");
 const confirmScheduleBtn = document.getElementById("confirm-schedule-btn");
-const saveStatus = document.getElementById("save-status");
+const toast = document.getElementById("toast");
 
 const refreshHistoryBtn = document.getElementById("refresh-history-btn");
 const historyViewPills = document.getElementById("history-view-pills");
@@ -670,6 +670,15 @@ function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+let toastTimer = null;
+
+function showToast(message, variant = "success") {
+  clearTimeout(toastTimer);
+  toast.className = `toast toast-${variant} visible`;
+  toast.innerHTML = `<span class="toast-icon">${variant === "success" ? "&#10003;" : "&#9888;"}</span> ${message}`;
+  toastTimer = setTimeout(() => toast.classList.remove("visible"), 3000);
+}
+
 function setTonePillsDisabled(disabled) {
   for (const btn of tonePills.querySelectorAll(".pill")) {
     btn.disabled = disabled;
@@ -711,7 +720,7 @@ async function publishPost(mode) {
   const type = selectedItemType || "Book";
   const caption = captionInput.value.trim();
   if (!caption) {
-    saveStatus.textContent = "Write or generate a caption first.";
+    showToast("Write or generate a caption first.", "error");
     return;
   }
 
@@ -720,10 +729,13 @@ async function publishPost(mode) {
   const platform = selectedPillValue(platformPills) || "Instagram";
   const postDate = mode === "now" ? todayStr() : postDateInput.value || todayStr();
 
+  const triggerBtn = mode === "now" ? postNowBtn : confirmScheduleBtn;
+  const triggerLabel = triggerBtn.textContent;
+
   postNowBtn.disabled = true;
   scheduleToggleBtn.disabled = true;
   confirmScheduleBtn.disabled = true;
-  saveStatus.textContent = mode === "now" ? "Posting..." : "Scheduling...";
+  triggerBtn.textContent = mode === "now" ? "Posting..." : "Scheduling...";
 
   const row = {
     post_id: generatePostId(),
@@ -739,17 +751,18 @@ async function publishPost(mode) {
 
   if (error) {
     console.error("Failed to save post", error);
-    saveStatus.textContent = `Error ${mode === "now" ? "posting" : "scheduling"} post: ${error.message}`;
+    showToast(`Error ${mode === "now" ? "posting" : "scheduling"} post: ${error.message}`, "error");
   } else {
-    saveStatus.textContent = mode === "now" ? "Posted!" : "Scheduled!";
+    showToast(mode === "now" ? "Posted!" : "Scheduled!");
     captionInput.value = "";
     syncCaptionPreview();
     currentHashtags = "";
     composerHashtags.textContent = "";
-      schedulePanel.classList.add("hidden");
+    schedulePanel.classList.add("hidden");
     await loadHistory();
   }
 
+  triggerBtn.textContent = triggerLabel;
   postNowBtn.disabled = false;
   scheduleToggleBtn.disabled = false;
   confirmScheduleBtn.disabled = false;
