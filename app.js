@@ -236,8 +236,20 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-tiktok-stage">
       <div class="composer-media hidden" id="composer-media"></div>
       <div class="composer-tiktok-topbar-overlay">
-        <span class="dim">Following</span><span class="active">For You</span>
-        <span class="composer-tiktok-search">&#128269;</span>
+        <span class="composer-tiktok-live">
+          <svg viewBox="0 0 24 18" width="21" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="4" x2="4" y2="0.5"/>
+            <line x1="17" y1="4" x2="20" y2="0.5"/>
+            <rect x="2" y="4" width="20" height="13" rx="2.5"/>
+            <text x="12" y="13.3" text-anchor="middle" font-size="6.3" font-weight="700" font-family="Arial, sans-serif" stroke="none" fill="currentColor">LIVE</text>
+          </svg>
+        </span>
+        <div class="composer-tiktok-tabs">
+          <span class="dim">Following</span><span class="active">For You</span>
+        </div>
+        <span class="composer-tiktok-search">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16" y2="16"/></svg>
+        </span>
       </div>
       <div class="composer-tiktok-rail">
         <div class="composer-tiktok-avatar-wrap">
@@ -267,9 +279,21 @@ const COMPOSER_TEMPLATES = {
         <div id="composer-hashtags" class="composer-hashtags"></div>
       </div>
       <div class="composer-tiktok-navbar-overlay">
-        <span>&#8962;</span><span>&#128101;</span>
-        <span class="composer-tiktok-create">&#43;</span>
-        <span>&#128172;</span><span>&#128100;</span>
+        <span class="composer-tiktok-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22 23h-6.001a1 1 0 0 1-1-1v-5.455a2.997 2.997 0 1 0-5.993 0V22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V11.543a1.002 1.002 0 0 1 .31-.724l9.988-9.558a1 1 0 0 1 1.383 0l9.988 9.558a1.002 1.002 0 0 1 .31.724V22a1 1 0 0 1-1 1Z"/></svg>
+        </span>
+        <span class="composer-tiktok-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 13.3c2.5.3 4.5 2.2 4.5 5"/></svg>
+        </span>
+        <span class="composer-tiktok-create">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </span>
+        <span class="composer-tiktok-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10l-4.5 4v-4H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/></svg>
+        </span>
+        <span class="composer-tiktok-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c0-4 3.5-6.5 7.5-6.5s7.5 2.5 7.5 6.5"/></svg>
+        </span>
       </div>
     </div>
   `,

@@ -881,10 +881,10 @@ button:disabled {
   left: 0;
   right: 0;
   z-index: 2;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 0.9rem;
-  padding: 0.6rem 0.75rem;
+  padding: 1.1rem 0.75rem 0.6rem;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.75);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -895,8 +895,21 @@ button:disabled {
   font-weight: 600;
 }
 
+.composer-tiktok-live {
+  justify-self: start;
+  display: inline-flex;
+  color: white;
+}
+
+.composer-tiktok-tabs {
+  justify-self: center;
+  display: flex;
+  gap: 0.9rem;
+}
+
 .composer-tiktok-search {
-  margin-left: auto;
+  justify-self: end;
+  display: inline-flex;
   color: white;
 }
 
@@ -976,18 +989,48 @@ button:disabled {
   justify-content: space-between;
   padding: 0.5rem 1rem;
   color: white;
-  font-size: 1.2rem;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
 }
 
+.composer-tiktok-nav-icon {
+  display: inline-flex;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+
+.composer-tiktok-nav-icon svg {
+  display: block;
+}
+
 .composer-tiktok-create {
-  background: linear-gradient(90deg, #25f4ee, #fe2c55);
-  color: white;
-  font-size: 1rem;
-  font-weight: bold;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 24px;
   border-radius: 6px;
-  padding: 0.15rem 0.7rem;
+  background: #161823;
+}
+
+.composer-tiktok-create::before,
+.composer-tiktok-create::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  border-radius: 6px;
+  z-index: -1;
+}
+
+.composer-tiktok-create::before {
+  left: -3px;
+  background: #25f4ee;
+}
+
+.composer-tiktok-create::after {
+  right: -3px;
+  background: #fe2c55;
 }
 
 .composer-tiktok-caption-overlay {
