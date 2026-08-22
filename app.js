@@ -244,10 +244,22 @@ const COMPOSER_TEMPLATES = {
           <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
           <span class="composer-tiktok-plus">&#43;</span>
         </div>
-        <div class="composer-tiktok-rail-item">&#9825;<small>1.2K</small></div>
-        <div class="composer-tiktok-rail-item">&#128172;<small>128</small></div>
-        <div class="composer-tiktok-rail-item">&#128278;<small>256</small></div>
-        <div class="composer-tiktok-rail-item">&#10132;<small>64</small></div>
+        <div class="composer-tiktok-rail-item">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.152 14.081 2.5 12.194 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg>
+          <small>1.2K</small>
+        </div>
+        <div class="composer-tiktok-rail-item">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" fill-rule="evenodd"><path d="M4 3.5h16A2.5 2.5 0 0 1 22.5 6v9a2.5 2.5 0 0 1-2.5 2.5h-9.6l-4.9 4V17.5H4A2.5 2.5 0 0 1 1.5 15V6A2.5 2.5 0 0 1 4 3.5Z M8.3 9.3a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z M12 9.3a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z M15.7 9.3a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6Z"/></svg>
+          <small>128</small>
+        </div>
+        <div class="composer-tiktok-rail-item">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><polygon points="20 21 12 13.44 4 21 4 3 20 3 20 21"/></svg>
+          <small>256</small>
+        </div>
+        <div class="composer-tiktok-rail-item">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-2a6 6 0 0 1 6-6h7"/><polyline points="13 3 18 7 13 11"/></svg>
+          <small>64</small>
+        </div>
       </div>
       <div class="composer-tiktok-caption-overlay">
         <div class="composer-account">${preview.handle}</div>
