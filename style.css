@@ -410,6 +410,17 @@ button:disabled {
   border-color: var(--accent);
 }
 
+.pill-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pill-platform svg {
+  display: block;
+  flex-shrink: 0;
+}
+
 .pill.hidden {
   display: none;
 }
