@@ -566,10 +566,16 @@ function renderComposerShell() {
   renderComposerMedia();
 }
 
-const PLACEHOLDER_ASSETS = {
-  Photo: "assets/placeholder-photo.png",
-  Video: "assets/placeholder-video.webm",
-};
+function samplePlaceholderMarkup(subtitle) {
+  return `
+    <div class="composer-media-placeholder">
+      <div class="composer-media-placeholder-circle">
+        <div class="composer-media-placeholder-title">Riverside Books</div>
+        <div class="composer-media-placeholder-subtitle">${subtitle}</div>
+      </div>
+    </div>
+  `;
+}
 
 const MAX_VIDEO_SECONDS = 8;
 
@@ -654,16 +660,7 @@ function renderComposerMedia() {
   if (!rawAsset) {
     composerMedia.classList.remove("hidden");
     composerMedia.style.background = "";
-    composerMedia.innerHTML = `
-      <div class="composer-media-intro">
-        <svg class="composer-media-intro-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
-          <path d="M32 18 C 27 14, 17 14, 10 16 V 46 C 17 44, 27 44, 32 48 C 37 44, 47 44, 54 46 V 16 C 47 14, 37 14, 32 18 Z" />
-          <line x1="32" y1="18" x2="32" y2="48" />
-        </svg>
-        <div class="composer-media-intro-title">Riverside Books</div>
-        <div class="composer-media-intro-subtitle">sample placeholder</div>
-      </div>
-    `;
+    composerMedia.innerHTML = samplePlaceholderMarkup("sample placeholder");
     return;
   }
 
@@ -687,11 +684,8 @@ function renderComposerMedia() {
     return;
   }
 
-  // No upload yet — show a bundled sample asset so the mock post still looks like a real post.
-  composerMedia.innerHTML =
-    asset === "Photo"
-      ? `<img src="${PLACEHOLDER_ASSETS.Photo}" alt="" class="composer-media-file" />`
-      : `<video src="${PLACEHOLDER_ASSETS.Video}" class="composer-media-file" muted autoplay loop playsinline></video>`;
+  // No upload yet — show a bundled sample placeholder so the mock post still looks like a real post.
+  composerMedia.innerHTML = samplePlaceholderMarkup(asset === "Photo" ? "sample photo placeholder" : "sample video placeholder");
 }
 
 function wait(ms) {
