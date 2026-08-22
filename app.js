@@ -644,10 +644,30 @@ function chooseFinderFile() {
 }
 
 function renderComposerMedia() {
-  const asset = selectedPillValue(assetPills) || "Text";
+  const rawAsset = selectedPillValue(assetPills);
+  const asset = rawAsset || "Text";
   updateUploadField();
 
-  if (asset === "Text" || !selectedItem) {
+  // No asset type chosen yet — show a pulsing branded placeholder so the preview
+  // doesn't look empty. Stays up through item selection, and only goes away once
+  // the user actually picks Photo, Video, or Text themselves.
+  if (!rawAsset) {
+    composerMedia.classList.remove("hidden");
+    composerMedia.style.background = "";
+    composerMedia.innerHTML = `
+      <div class="composer-media-intro">
+        <svg class="composer-media-intro-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+          <path d="M32 18 C 27 14, 17 14, 10 16 V 46 C 17 44, 27 44, 32 48 C 37 44, 47 44, 54 46 V 16 C 47 14, 37 14, 32 18 Z" />
+          <line x1="32" y1="18" x2="32" y2="48" />
+        </svg>
+        <div class="composer-media-intro-title">Riverside Books</div>
+        <div class="composer-media-intro-subtitle">sample placeholder</div>
+      </div>
+    `;
+    return;
+  }
+
+  if (asset === "Text") {
     composerMedia.classList.add("hidden");
     composerMedia.innerHTML = "";
     composerMedia.style.background = "";
@@ -656,9 +676,6 @@ function renderComposerMedia() {
 
   composerMedia.classList.remove("hidden");
   composerMedia.style.background = "";
-
-  const type = selectedPillValue(typePills) || "Book";
-  const label = type === "Book" ? selectedItem.title : selectedItem.event_name;
 
   if (uploadedMediaUrl) {
     if (asset === "Photo") {
@@ -671,11 +688,10 @@ function renderComposerMedia() {
   }
 
   // No upload yet — show a bundled sample asset so the mock post still looks like a real post.
-  const placeholderTag =
+  composerMedia.innerHTML =
     asset === "Photo"
       ? `<img src="${PLACEHOLDER_ASSETS.Photo}" alt="" class="composer-media-file" />`
       : `<video src="${PLACEHOLDER_ASSETS.Video}" class="composer-media-file" muted autoplay loop playsinline></video>`;
-  composerMedia.innerHTML = `${placeholderTag}<span class="composer-media-overlay-label">${label}</span>`;
 }
 
 function wait(ms) {
