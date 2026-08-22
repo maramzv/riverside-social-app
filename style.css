@@ -783,16 +783,52 @@ button:disabled {
 .composer-fb-meta {
   font-size: 0.72rem;
   color: #8a7d70;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.composer-fb-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.composer-fb-header-icon {
+  display: inline-flex;
+  color: var(--ink);
 }
 
 .composer-fb-reactions {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0.4rem 0.75rem 0;
   font-size: 0.78rem;
   color: #6b5d52;
   border-top: 1px solid var(--border);
   margin-top: 0.5rem;
+}
+
+.composer-fb-reaction-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.composer-fb-reaction-icons {
+  display: inline-flex;
+}
+
+.composer-fb-reaction-icons svg {
+  display: block;
+  margin-left: -0.35rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px white;
+}
+
+.composer-fb-reaction-icons svg:first-child {
+  margin-left: 0;
 }
 
 .composer-fb-actions {
@@ -802,6 +838,12 @@ button:disabled {
   font-size: 0.8rem;
   color: #6b5d52;
   font-weight: 600;
+}
+
+.composer-fb-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 /* X */
