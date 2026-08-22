@@ -103,8 +103,12 @@ const COMPOSER_TEMPLATES = {
     <div class="composer-ig-topbar">
       <span class="composer-ig-wordmark">Instagram</span>
       <span class="composer-header-spacer"></span>
-      <span class="composer-header-icon">&#9825;</span>
-      <span class="composer-header-icon">&#9993;</span>
+      <span class="composer-header-icon composer-ig-topbar-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.152 14.081 2.5 12.194 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg>
+      </span>
+      <span class="composer-header-icon composer-ig-topbar-icon">
+        <svg viewBox="0 0 512 512" width="20" height="20" fill="currentColor"><path d="M256.55 8C116.52 8 8 110.34 8 248.57c0 72.3 29.71 134.78 78.07 177.94 8.35 7.51 6.63 11.86 8.05 58.23A19.92 19.92 0 0 0 122 502.31c52.91-23.3 53.59-25.14 62.56-22.7C337.85 521.8 504 423.7 504 248.57 504 110.34 396.59 8 256.55 8zm149.24 185.13-73 115.57a37.37 37.37 0 0 1-53.91 9.93l-58.08-43.47a15 15 0 0 0-18 0l-78.37 59.44c-10.46 7.93-24.16-4.6-17.11-15.67l73-115.57a37.36 37.36 0 0 1 53.91-9.93l58.06 43.46a15 15 0 0 0 18 0l78.41-59.38c10.44-7.94 24.14 4.6 17.09 15.62z"/></svg>
+      </span>
     </div>
     <div class="composer-header">
       <div class="composer-avatar" style="background:${preview.avatarBg}">RB</div>
@@ -114,11 +118,19 @@ const COMPOSER_TEMPLATES = {
     </div>
     <div class="composer-media hidden" id="composer-media"></div>
     <div class="composer-ig-actions">
-      <span class="composer-action-icon">&#9825;</span>
-      <span class="composer-action-icon">&#128172;</span>
-      <span class="composer-action-icon">&#10148;</span>
+      <span class="composer-action-icon composer-action-icon-liked">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="#ed4956" stroke="#ed4956" stroke-width="1.7"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.152 14.081 2.5 12.194 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg>
+      </span>
+      <span class="composer-action-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"/></svg>
+      </span>
+      <span class="composer-action-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="3" x2="9.218" y2="10.083"/><polygon points="11.698 20.334 22 3.001 2 3.001 9.218 10.083 11.698 20.334"/></svg>
+      </span>
       <span class="composer-action-spacer"></span>
-      <span class="composer-action-icon">&#128278;</span>
+      <span class="composer-action-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><polygon points="20 21 12 13.44 4 21 4 3 20 3 20 21"/></svg>
+      </span>
     </div>
     <div class="composer-ig-liked">Liked by <strong>others</strong></div>
     <div class="composer-caption-wrap">
@@ -127,7 +139,21 @@ const COMPOSER_TEMPLATES = {
     </div>
     <div id="composer-hashtags" class="composer-hashtags"></div>
     <div class="composer-ig-navbar">
-      <span>&#8962;</span><span>&#128269;</span><span>&#10133;</span><span>&#9654;</span><span>&#9679;</span>
+      <span class="composer-nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M22 23h-6.001a1 1 0 0 1-1-1v-5.455a2.997 2.997 0 1 0-5.993 0V22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V11.543a1.002 1.002 0 0 1 .31-.724l9.988-9.558a1 1 0 0 1 1.383 0l9.988 9.558a1.002 1.002 0 0 1 .31.724V22a1 1 0 0 1-1 1Z"/></svg>
+      </span>
+      <span class="composer-nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <span class="composer-nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      </span>
+      <span class="composer-nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="2.5" width="17" height="19" rx="4"/><polygon points="10.5 8.5 16 12 10.5 15.5 10.5 8.5"/></svg>
+      </span>
+      <span class="composer-nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="10" r="3.2"/><path d="M6.2 18c1.4-2.8 3.7-3.8 5.8-3.8s4.4 1 5.8 3.8"/></svg>
+      </span>
     </div>
   `,
 

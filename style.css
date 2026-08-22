@@ -603,6 +603,17 @@ button:disabled {
   font-size: 1.1rem;
 }
 
+.composer-ig-topbar-icon {
+  display: inline-flex;
+  color: var(--ink);
+}
+
+.composer-ig-topbar-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
 .composer-media {
   aspect-ratio: 1 / 1;
   display: flex;
@@ -717,10 +728,21 @@ button:disabled {
 .composer-ig-navbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.6rem 0.9rem;
   margin-top: 0.5rem;
   border-top: 1px solid var(--border);
-  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.composer-nav-icon {
+  display: inline-flex;
+}
+
+.composer-nav-icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
 }
 
 .composer-ig-actions {
@@ -728,8 +750,17 @@ button:disabled {
   align-items: center;
   gap: 0.7rem;
   padding: 0.5rem 0.75rem 0.1rem;
-  font-size: 1.2rem;
   color: var(--ink);
+}
+
+.composer-ig-actions .composer-action-icon {
+  display: inline-flex;
+}
+
+.composer-ig-actions .composer-action-icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
 }
 
 .composer-action-spacer {
