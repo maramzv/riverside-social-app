@@ -5,15 +5,15 @@ import { DEMO_UPLOADS } from "./assets/demo-uploads/manifest.js";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const typePills = document.getElementById("type-pills");
-const itemCombobox = document.getElementById("item-combobox");
+const bookCountEl = document.getElementById("book-count");
+const eventCountEl = document.getElementById("event-count");
 const itemSearchInput = document.getElementById("item-search");
-const itemList = document.getElementById("item-list");
+const itemGrid = document.getElementById("item-grid");
 const detailsBox = document.getElementById("item-details");
 
 const platformPills = document.getElementById("platform-pills");
 const assetPills = document.getElementById("asset-pills");
 const tonePills = document.getElementById("tone-pills");
-const aiGenerateBtn = document.getElementById("ai-generate-btn");
 
 const captionInput = document.getElementById("caption-input");
 
@@ -65,14 +65,12 @@ const calendarGrid = document.getElementById("calendar-grid");
 let books = [];
 let events = [];
 let selectedItem = null;
+let selectedItemType = "Book";
 let platformLinks = {};
 let uploadedMediaUrl = null;
-let itemListOptions = [];
-let itemListActiveIndex = -1;
 let allPosts = [];
 let calendarViewDate = new Date();
 let currentHashtags = "";
-let selectedTone = null;
 
 // Matches the platform values actually in use in the shared Social Posts dataset.
 const PLATFORMS = ["Instagram", "TikTok", "X", "Facebook", "Pinterest"];
@@ -363,7 +361,9 @@ async function loadPickerData() {
   books = booksData || [];
   events = eventsData || [];
 
-  populateItemSelect();
+  updateTypeCounts();
+  selectPill(typePills, selectedItemType);
+  renderItemGrid();
 }
 
 async function loadPlatforms() {
@@ -394,90 +394,75 @@ async function loadPlatforms() {
 // --- item picking --------------------------------------------------------
 
 function itemLabel(type, item) {
-  return type === "Book" ? `${item.title} — ${item.author}` : item.event_name;
+  return type === "Book" ? item.title : item.event_name;
 }
 
-function itemId(type, item) {
-  return type === "Book" ? item.book_id : item.event_id;
+// Short "Jan 31" form for card meta tags — the full weekday/month spelling from
+// formatDate() is too wide to fit in a card.
+function shortDate(isoDateStr) {
+  const [year, month, day] = isoDateStr.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function clearItemSelection() {
+function itemIdField(type) {
+  return type === "Book" ? "book_id" : "event_id";
+}
+
+// The tiny secondary tag on each card: author for books, date for events.
+function itemMeta(type, item) {
+  return type === "Book" ? item.author : shortDate(item.event_date);
+}
+
+function updateTypeCounts() {
+  bookCountEl.textContent = `(${books.length})`;
+  eventCountEl.textContent = `(${events.length})`;
+}
+
+// Events sort soonest-first (see the Events query's order("event_date")); books
+// stay alphabetical (see the Books query's order("title")).
+function renderItemGrid() {
+  const type = selectedItemType;
+  const idField = itemIdField(type);
+  const list = type === "Book" ? books : events;
+  const query = itemSearchInput.value.trim().toLowerCase();
+  const filtered = query ? list.filter((item) => itemLabel(type, item).toLowerCase().includes(query)) : list;
+
+  if (filtered.length === 0) {
+    itemGrid.innerHTML = '<p class="item-grid-empty">No matches</p>';
+    return;
+  }
+
+  itemGrid.innerHTML = filtered
+    .map((item) => {
+      const id = item[idField];
+      const selected = selectedItem && item[idField] === selectedItem[idField] ? " selected" : "";
+      return `
+        <button type="button" class="item-card${selected}" data-id="${id}">
+          <span class="item-card-title">${itemLabel(type, item)}</span>
+          <span class="item-card-meta">${itemMeta(type, item)}</span>
+        </button>
+      `;
+    })
+    .join("");
+}
+
+function selectType(type) {
+  selectedItemType = type;
   selectedItem = null;
   detailsBox.textContent = "";
   resetComposer();
-}
 
-function populateItemSelect() {
-  const type = selectedPillValue(typePills);
   itemSearchInput.value = "";
-  closeItemList();
-  clearItemSelection();
-
-  if (!type) {
-    itemSearchInput.disabled = true;
-    itemSearchInput.placeholder = "Choose Book or Event first";
-    return;
-  }
-  itemSearchInput.disabled = false;
-  itemSearchInput.placeholder = type === "Book" ? "Search books..." : "Search events...";
+  renderItemGrid();
 }
 
-function renderItemList(query) {
-  const type = selectedPillValue(typePills) || "Book";
-  const list = type === "Book" ? books : events;
-  const q = query.trim().toLowerCase();
-
-  itemListOptions = q ? list.filter((item) => itemLabel(type, item).toLowerCase().includes(q)) : list;
-  itemListActiveIndex = -1;
-
-  if (itemListOptions.length === 0) {
-    itemList.innerHTML = '<li class="combobox-empty">No matches</li>';
-  } else {
-    itemList.innerHTML = itemListOptions
-      .map(
-        (item, i) =>
-          `<li class="combobox-option" role="option" id="item-option-${i}" data-index="${i}">${itemLabel(type, item)}</li>`
-      )
-      .join("");
-  }
-
-  openItemList();
-}
-
-function openItemList() {
-  itemList.classList.remove("hidden");
-  itemSearchInput.setAttribute("aria-expanded", "true");
-}
-
-function closeItemList() {
-  itemList.classList.add("hidden");
-  itemSearchInput.setAttribute("aria-expanded", "false");
-  itemListActiveIndex = -1;
-}
-
-function setActiveOption(index) {
-  const options = itemList.querySelectorAll(".combobox-option");
-  options.forEach((el) => el.classList.remove("active"));
-  if (index >= 0 && options[index]) {
-    options[index].classList.add("active");
-    options[index].scrollIntoView({ block: "nearest" });
-    itemSearchInput.setAttribute("aria-activedescendant", options[index].id);
-  } else {
-    itemSearchInput.removeAttribute("aria-activedescendant");
-  }
-  itemListActiveIndex = index;
-}
-
-function chooseItem(item) {
-  const type = selectedPillValue(typePills) || "Book";
+function chooseGridItem(item) {
   selectedItem = item;
-  itemSearchInput.value = itemLabel(type, item);
-  closeItemList();
 
   detailsBox.textContent =
-    type === "Book"
-      ? `${selectedItem.title} by ${selectedItem.author}\n\n${selectedItem.blurb}`
-      : `${selectedItem.event_name} — ${formatDate(selectedItem.event_date)}\n\n${selectedItem.event_description}`;
+    selectedItemType === "Book"
+      ? `${item.title} by ${item.author}\n\n${item.blurb}`
+      : `${item.event_name} — ${formatDate(item.event_date)}\n\n${item.event_description}`;
 
   enableComposer();
 }
@@ -489,12 +474,7 @@ function syncCaptionPreview() {
 }
 
 function resetToneSelection() {
-  selectedTone = null;
   selectPill(tonePills, null);
-}
-
-function updateGenerateButtonState() {
-  aiGenerateBtn.disabled = !(selectedItem && selectedTone);
 }
 
 function resetComposer() {
@@ -504,7 +484,6 @@ function resetComposer() {
   schedulePanel.classList.add("hidden");
   resetToneSelection();
   setTonePillsDisabled(true);
-  updateGenerateButtonState();
   captionInput.value = "";
   syncCaptionPreview();
   currentHashtags = "";
@@ -519,7 +498,6 @@ function enableComposer() {
   scheduleToggleBtn.disabled = false;
   resetToneSelection();
   setTonePillsDisabled(false);
-  updateGenerateButtonState();
   captionInput.value = "";
   syncCaptionPreview();
   currentHashtags = "";
@@ -698,30 +676,28 @@ function setTonePillsDisabled(disabled) {
   }
 }
 
-async function generateWithTone(tone) {
+async function generateWithTone(tone, pillEl) {
   if (!selectedItem) return;
 
-  composerCaption.classList.add("thinking");
-  composerCaption.textContent = "Thinking...";
   currentHashtags = "";
   composerHashtags.textContent = "";
   setTonePillsDisabled(true);
-  aiGenerateBtn.disabled = true;
+  pillEl.classList.add("pill-loading");
 
-  await wait(650);
+  await wait(500);
 
-  const type = selectedPillValue(typePills) || "Book";
+  const type = selectedItemType || "Book";
   const template = pickRandom(CAPTION_TEMPLATES[type][tone]);
   const caption = template(selectedItem);
   const hashtags = hashtagsFor(type, selectedItem);
 
-  composerCaption.classList.remove("thinking");
   captionInput.value = caption;
   syncCaptionPreview();
   currentHashtags = hashtags.join(" ");
   composerHashtags.textContent = currentHashtags;
   setTonePillsDisabled(false);
-  updateGenerateButtonState();
+  pillEl.classList.remove("pill-loading");
+  selectPill(tonePills, tone);
 }
 
 // --- scheduling / history --------------------------------------------------------
@@ -732,7 +708,7 @@ function generatePostId() {
 
 async function publishPost(mode) {
   if (!selectedItem) return;
-  const type = selectedPillValue(typePills) || "Book";
+  const type = selectedItemType || "Book";
   const caption = captionInput.value.trim();
   if (!caption) {
     saveStatus.textContent = "Write or generate a caption first.";
@@ -926,49 +902,21 @@ async function loadHistory() {
 
 // --- wiring --------------------------------------------------------
 
-setupPillGroup(typePills, populateItemSelect);
+setupPillGroup(typePills, selectType);
 
-itemSearchInput.addEventListener("input", () => {
-  if (selectedItem) clearItemSelection();
-  renderItemList(itemSearchInput.value);
-});
+itemSearchInput.addEventListener("input", renderItemGrid);
 
-itemSearchInput.addEventListener("focus", () => {
-  renderItemList(itemSearchInput.value);
-});
+itemGrid.addEventListener("click", (e) => {
+  const card = e.target.closest(".item-card");
+  if (!card) return;
+  const list = selectedItemType === "Book" ? books : events;
+  const idField = itemIdField(selectedItemType);
+  const item = list.find((entry) => entry[idField] === card.dataset.id);
+  if (!item) return;
 
-itemSearchInput.addEventListener("keydown", (e) => {
-  if (itemList.classList.contains("hidden") && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-    renderItemList(itemSearchInput.value);
-    return;
-  }
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    setActiveOption(Math.min(itemListActiveIndex + 1, itemListOptions.length - 1));
-  } else if (e.key === "ArrowUp") {
-    e.preventDefault();
-    setActiveOption(Math.max(itemListActiveIndex - 1, 0));
-  } else if (e.key === "Enter") {
-    if (itemListActiveIndex >= 0 && itemListOptions[itemListActiveIndex]) {
-      e.preventDefault();
-      chooseItem(itemListOptions[itemListActiveIndex]);
-    }
-  } else if (e.key === "Escape") {
-    closeItemList();
-  }
-});
-
-itemList.addEventListener("mousedown", (e) => {
-  // mousedown (not click) fires before the input's blur, so the list is still in the DOM when we read it.
-  const option = e.target.closest(".combobox-option");
-  if (!option) return;
-  e.preventDefault();
-  chooseItem(itemListOptions[Number(option.dataset.index)]);
-});
-
-itemSearchInput.addEventListener("blur", () => {
-  closeItemList();
-  if (!selectedItem) itemSearchInput.value = "";
+  for (const sibling of itemGrid.querySelectorAll(".item-card")) sibling.classList.remove("selected");
+  card.classList.add("selected");
+  chooseGridItem(item);
 });
 
 setupPillGroup(platformPills, renderComposerShell);
@@ -976,17 +924,13 @@ setupPillGroup(assetPills, () => {
   clearUpload();
   renderComposerMedia();
 });
-setupPillGroup(tonePills, (tone) => {
-  selectedTone = tone;
-  updateGenerateButtonState();
+tonePills.addEventListener("click", (e) => {
+  const btn = e.target.closest(".pill");
+  if (!btn || btn.disabled || !selectedItem) return;
+  generateWithTone(btn.dataset.value, btn);
 });
 
 captionInput.addEventListener("input", syncCaptionPreview);
-
-aiGenerateBtn.addEventListener("click", () => {
-  if (!selectedItem || !selectedTone) return;
-  generateWithTone(selectedTone);
-});
 
 uploadInput.addEventListener("change", () => {
   const file = uploadInput.files[0];

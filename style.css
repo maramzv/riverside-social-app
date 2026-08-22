@@ -224,65 +224,71 @@ label {
   gap: 0.25rem;
 }
 
-.item-select-label {
-  display: block;
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
+.item-picker-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
-.combobox {
-  position: relative;
-  margin-top: 0.25rem;
-}
-
-.combobox input[type="text"] {
-  width: 100%;
-}
-
-.combobox input[type="text"]:disabled {
-  background: #f4ede3;
-  color: #a99c8f;
-  cursor: not-allowed;
-}
-
-.combobox-list {
-  position: absolute;
-  z-index: 10;
-  top: calc(100% + 0.25rem);
-  left: 0;
-  right: 0;
-  max-height: 260px;
-  overflow-y: auto;
-  margin: 0;
-  padding: 0.25rem;
-  list-style: none;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  box-shadow: 0 6px 16px rgba(43, 35, 32, 0.12);
-}
-
-.combobox-list.hidden {
-  display: none;
-}
-
-.combobox-option {
-  padding: 0.45rem 0.6rem;
-  border-radius: 4px;
+.item-search-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-family: inherit;
   font-size: 0.9rem;
-  cursor: pointer;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
-.combobox-option.active,
-.combobox-option:hover {
-  background: #f4ede3;
+.item-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.6rem;
 }
 
-.combobox-empty {
-  padding: 0.45rem 0.6rem;
+.item-grid-empty {
+  grid-column: 1 / -1;
   font-size: 0.85rem;
   color: #8a7d70;
   font-style: italic;
+  margin: 0;
+}
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.item-card:hover {
+  border-color: var(--accent);
+}
+
+.item-card.selected {
+  border: 2px solid var(--accent);
+  padding: calc(0.6rem - 1px) calc(0.75rem - 1px);
+  background: #f4ede3;
+}
+
+.item-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.item-card-meta {
+  font-size: 0.75rem;
+  color: #8a7d70;
 }
 
 select,
@@ -373,8 +379,29 @@ button:disabled {
   display: none;
 }
 
-.ai-generate-row {
+.tone-inline {
   margin-top: 0.5rem;
+}
+
+.tone-inline-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  color: #6b5d52;
+}
+
+.pill-loading {
+  pointer-events: none;
+  animation: pill-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pill-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 .tone-panel {
@@ -920,22 +947,6 @@ button:disabled {
 .composer-caption:empty::before {
   content: attr(data-placeholder);
   color: #a99c8f;
-}
-
-.composer-caption.thinking {
-  color: #a99c8f;
-  font-style: italic;
-  animation: caption-pulse 1s ease-in-out infinite;
-}
-
-@keyframes caption-pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
 }
 
 .composer-hashtags {
