@@ -784,7 +784,7 @@ function buildRow(post, cells) {
 }
 
 function postMetaCell(post) {
-  return `<td class="post-meta-cell"><span class="meta-date">${formatDate(post.post_date)}</span><span class="platform-badge">${post.platform}</span></td>`;
+  return `<td class="post-meta-cell"><div class="post-meta-inner"><span class="meta-date">${formatDate(post.post_date)}</span><span class="platform-badge">${post.platform}</span></div></td>`;
 }
 
 function captionCell(caption) {

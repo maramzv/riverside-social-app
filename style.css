@@ -944,11 +944,14 @@ tbody tr:hover {
 }
 
 .post-meta-cell {
+  white-space: nowrap;
+}
+
+.post-meta-inner {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.25rem;
-  white-space: nowrap;
 }
 
 .meta-date {
